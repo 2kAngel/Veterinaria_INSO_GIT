@@ -75,6 +75,7 @@ FORM1;
                 <br>
                 <br>
                 <input type="submit" name="Submit" value="Añadir">
+            </form>
                 
 FORMULARIO;
         
