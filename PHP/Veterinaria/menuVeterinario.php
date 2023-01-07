@@ -17,12 +17,32 @@ and open the template in the editor.
         <?php
         
         $form=<<<FORM
-            <a href='cliente.php' title='Crear cliente'><br>
-            <a href='mascota.php'>Crear mascota</a><br>
-            <a href='veterinario.php'>Crear veterinario</a><br>    
-            <a href='tipo.php'>Crear tipo</a><br>
-            <a href='tarea.php'>Crear tarea</a><br> 
+            <a href='registrar_cliente.php'>Registrar cliente</a><br>
+            <a href='registrar_mascota.php'>Registrar mascota</a><br>
+            <a href='registrar_veterinario.php'>Registrar veterinario</a><br>             
+            <a href='registrar_tipo.php'>Registrar tipo producto</a><br>
+            <a href='registrar_tratamiento.php'>Registrar tratamiento</a><br>   
+            <a href='registrar_producto.php'>Registrar producto</a><br>  
+             
+  
+            <a href='modificar_cliente.php'>Modificar cliente</a><br>
+            <a href='modificar_mascota.php'>Modificar mascota</a><br>   
+            <a href='modificar_veterinario.php'>Modificar veterinario</a><br>
                 
+            <a href='.php'>Modificar producto</a><br>   
+            <a href='.php'>Modificar tratamiento</a><br>  
+                
+                
+            <a href='elim_cliente.php'>Eliminar cliente</a><br>
+            <a href='elim_mascota.php'>Eliminar mascota</a><br>   
+            <a href='elim_veterinario.php'>Eliminar veterinario</a><br>
+            <a href='elim_producto.php'>Eliminar producto</a><br>   
+            <a href='elim_tratamiento.php'>Eliminar tratamiento</a><br>  
+                
+                
+            <a href='.php'>Generar factura (trata-masc)</a><br>  
+      
+            
 FORM;
         print $form;
         ?>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-12-2022 a las 02:33:35
+-- Tiempo de generación: 02-01-2023 a las 21:01:31
 -- Versión del servidor: 10.1.26-MariaDB
 -- Versión de PHP: 7.1.8
 
@@ -41,9 +41,7 @@ CREATE TABLE `cliente` (
 --
 
 INSERT INTO `cliente` (`dniCli`, `nombreCli`, `apellidoCli`, `passwordCli`, `emailCli`) VALUES
-('11111111A', 'Jorge', 'Ramón', 'cajal', 'a@a.a'),
-('1234567A', 'adolfo', 'aubergeno', NULL, 'aaa@bb.cc'),
-('1234567B', 'eberencio', 'facherez', 'a', 'aa@aa.aa');
+('123456789E', 'Carlos', 'Cano Gomez', '1234', 'carlos@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -54,16 +52,9 @@ INSERT INTO `cliente` (`dniCli`, `nombreCli`, `apellidoCli`, `passwordCli`, `ema
 CREATE TABLE `cliente_producto` (
   `dniCli` varchar(100) COLLATE utf16_spanish_ci NOT NULL,
   `idProducto` int(254) NOT NULL,
-    `idRec` int(254) NOT NULL,
+  `idRec` int(254) NOT NULL,
   `cantidad` int(254) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
-
---
--- Volcado de datos para la tabla `cliente_producto`
---
-
-INSERT INTO `cliente_producto` (`dniCli`, `idProducto`, `cantidad`) VALUES
-('1234567A', 4, 123456);
 
 -- --------------------------------------------------------
 
@@ -73,7 +64,6 @@ INSERT INTO `cliente_producto` (`dniCli`, `idProducto`, `cantidad`) VALUES
 
 CREATE TABLE `factura` (
   `idFact` int(254) NOT NULL,
-  /*`idTarea` int(254) DEFAULT NULL,*/
   `fechaFact` varchar(100) COLLATE utf16_spanish_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
 
@@ -86,10 +76,17 @@ CREATE TABLE `factura` (
 CREATE TABLE `mascota` (
   `idMasc` int(254) NOT NULL,
   `dniCli` varchar(100) COLLATE utf16_spanish_ci NOT NULL,
-  `dniVet` varchar(100) COLLATE utf16_spanish_ci NOT NULL,
   `tipoAnimal` varchar(100) COLLATE utf16_spanish_ci DEFAULT NULL,
-  `sexo` varchar(100) COLLATE utf16_spanish_ci DEFAULT NULL
+  `sexo` varchar(100) COLLATE utf16_spanish_ci DEFAULT NULL,
+  `dniVet` varchar(100) COLLATE utf16_spanish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `mascota`
+--
+
+INSERT INTO `mascota` (`idMasc`, `dniCli`, `tipoAnimal`, `sexo`, `dniVet`) VALUES
+(1, '123456789E', 'perro', 'H', '123412345E');
 
 -- --------------------------------------------------------
 
@@ -104,17 +101,6 @@ CREATE TABLE `producto` (
   `stock` int(254) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
 
---
--- Volcado de datos para la tabla `producto`
---
-
-INSERT INTO `producto` (`idProducto`, `tipoProducto`, `nombrePro`, `stock`) VALUES
-(1, 'tipo1', 'galletas', 26),
-(2, 'tipo1', 'galletas sabor carne roja', 44),
-(3, 'tipo1', 'galletas sabor pescado', 57),
-(4, 'tipo2', 'vacuna A', 12),
-(6, 'tipo2', 'vacuna 11A3', 10);
-
 -- --------------------------------------------------------
 
 --
@@ -123,45 +109,10 @@ INSERT INTO `producto` (`idProducto`, `tipoProducto`, `nombrePro`, `stock`) VALU
 
 CREATE TABLE `recibo` (
   `idRec` int(254) NOT NULL,
-  /*`dniCliente` varchar(100) COLLATE utf16_spanish_ci NOT NULL,
-  `idProducto` int(254) NOT NULL,
- */
-   `fechaRec` varchar(100) COLLATE utf16_spanish_ci NOT NULL
-   `precioRec` float NOT NULL
+  `fechaRec` varchar(100) COLLATE utf16_spanish_ci NOT NULL,
+  `precioRec` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
 
---
--- Volcado de datos para la tabla `recibo`
---
-
-INSERT INTO `recibo` (`idRec`, `dniCliente`, `idProducto`, `fechaRec`, `precioRec`) VALUES
-(1, '1234567A', 3, '18.18.18', 1234),
-(2, '1234567A', 1, '07.12.22', 165.5),
-(3, '1234567A', 1, '07.12.22', 165.5),
-(4, '1234567A', 1, '07.12.22', 165.5),
-(5, '1234567A', 1, '07.12.22', 165.5),
-(6, '1234567A', 1, '2345t', 123),
-(7, '1234567A', 1, '123456', 23),
-(8, '1234567A', 1, '07.12.22', 165.5),
-(9, '1234567A', 1, '07.12.22', 165.5),
-(10, '1234567A', 1, '07.12.22', 165.5),
-(11, '1234567A', 1, '07.12.22', 165.5),
-(12, '1234567B', 1, '07.12.22', 66.2);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tarea`
---
-/*
-CREATE TABLE `tarea` (
-  `tipoTarea` varchar(100) COLLATE utf16_spanish_ci NOT NULL,
-  `idMasc` int(254) NOT NULL,
-  `precio` float NOT NULL,
-  `idTarea` int(254) NOT NULL,
-  `idFact` int(254) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
-*/
 -- --------------------------------------------------------
 
 --
@@ -178,8 +129,41 @@ CREATE TABLE `tipo` (
 --
 
 INSERT INTO `tipo` (`tipoPro`, `precio`) VALUES
-('tipo1', 33.1),
-('tipo2', 12.33);
+('champu', 4);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tratamiento`
+--
+
+CREATE TABLE `tratamiento` (
+  `idTrata` int(100) NOT NULL,
+  `tipoTrata` varchar(100) COLLATE utf16_spanish_ci NOT NULL,
+  `precioTrata` float(8,2) NOT NULL,
+  `fechaTrata` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `tratamiento`
+--
+
+INSERT INTO `tratamiento` (`idTrata`, `tipoTrata`, `precioTrata`, `fechaTrata`) VALUES
+(12345, 'quimio', 120.00, '2023-01-17'),
+(13234, 'relajante', 100.00, '2023-01-18');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `trata_masc`
+--
+
+CREATE TABLE `trata_masc` (
+  `idMasc` int(254) NOT NULL,
+  `idTrata` int(100) NOT NULL,
+  `idFact` int(254) NOT NULL,
+  `observacion` varchar(100) COLLATE utf16_spanish_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -195,55 +179,18 @@ CREATE TABLE `veterinario` (
   `emailVet` varchar(100) COLLATE utf16_spanish_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
 
-
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `tratamiento`
+-- Volcado de datos para la tabla `veterinario`
 --
 
-CREATE TABLE `tratamiento` (
-  `idTrata` int(100) COLLATE utf16_spanish_ci NOT NULL,
-  `tipoTrata` varchar(100) COLLATE utf16_spanish_ci DEFAULT NULL,
-  `precioTrata` float COLLATE utf16_spanish_ci DEFAULT NULL,
-  `fechaTrata` varchar(100) COLLATE utf16_spanish_ci DEFAULT NULL,
-) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
-
-
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tratamiento`
---
-
-CREATE TABLE `trata_masc` (
-  `idMasc` int(254) COLLATE utf16_spanish_ci NOT NULL,
-  `idTrata` int(100) COLLATE utf16_spanish_ci NOT NULL,
-  `idFact` int(254) COLLATE utf16_spanish_ci NOT NULL,
-  `observacion` varchar(100) COLLATE utf16_spanish_ci DEFAULT NULL,
-) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci;
-
+INSERT INTO `veterinario` (`dniVet`, `nombreVet`, `numVet`, `passwordVet`, `emailVet`) VALUES
+('123412345E', 'Ana', 'qwmeddc', '1234', 'ana@gmail.com'),
+('987654321W', 'Pedrito', 'qwert', '1234', 'pedro@gmail.com');
 
 --
 -- Índices para tablas volcadas
 --
---
--- Indices de la tabla `trata_masc`
---
-ALTER TABLE `trata_masc`
-    ADD PRIMARY KEY (`dniCli`);
-    ADD PRIMARY KEY (`idTrata`);
-    ADD PRIMARY KEY (`idFact`);
-    ADD KEY `FK_dniCli` (`dniCli`);
-    ADD KEY `FK_idTrata` (`idTrata`);
-    ADD KEY `idFact` (`idFact`);
-    MODIFY `dniCli` int(254) NOT NULL AUTO_INCREMENT;
-    MODIFY `idTrata` int(100) NOT NULL AUTO_INCREMENT;
-    MODIFY `idFact` int(254) NOT NULL AUTO_INCREMENT;   
 
-
-    
 --
 -- Indices de la tabla `cliente`
 --
@@ -254,17 +201,15 @@ ALTER TABLE `cliente`
 -- Indices de la tabla `cliente_producto`
 --
 ALTER TABLE `cliente_producto`
-    ADD PRIMARY KEY (`dniCli`,`idProducto`, `idFact`),
-    ADD KEY `FK_dniCli` (`dniCli`),
-    ADD KEY `FK_idProducto` (`idProducto`),
-    ADD KEY `FK_idFact` (`idFact`);
+  ADD PRIMARY KEY (`dniCli`,`idProducto`,`idRec`),
+  ADD KEY `cliente_producto_ibfk_2` (`idProducto`),
+  ADD KEY `cliente_producto_ibfk_3` (`idRec`);
 
 --
 -- Indices de la tabla `factura`
 --
 ALTER TABLE `factura`
   ADD PRIMARY KEY (`idFact`);
- /* ADD KEY `FK_idTarea` (`idTarea`);*/
 
 --
 -- Indices de la tabla `mascota`
@@ -272,37 +217,40 @@ ALTER TABLE `factura`
 ALTER TABLE `mascota`
   ADD PRIMARY KEY (`idMasc`),
   ADD KEY `FK_dniCli` (`dniCli`),
-  ADD KEY `FK_dniVet` (`dniVet`);
+  ADD KEY `dniVet` (`dniVet`);
 
 --
 -- Indices de la tabla `producto`
 --
 ALTER TABLE `producto`
   ADD PRIMARY KEY (`idProducto`),
-  ADD KEY `FK_tipoProducto` (`tipoProducto`);
+  ADD KEY `FK_tipoPro` (`tipoProducto`);
 
 --
 -- Indices de la tabla `recibo`
 --
 ALTER TABLE `recibo`
   ADD PRIMARY KEY (`idRec`);
-  /*ADD KEY `FK_dniCliente` (`dniCliente`),
-  ADD KEY `FK_idProducto` (`idProducto`);*/
 
---
--- Indices de la tabla `tarea`
---
-/*
-ALTER TABLE `tarea`
-  ADD PRIMARY KEY (`idTarea`),
-  ADD KEY `FK_idMasc` (`idMasc`),
-  ADD KEY `FK_idFact` (`idFact`);
-*/
 --
 -- Indices de la tabla `tipo`
 --
 ALTER TABLE `tipo`
   ADD PRIMARY KEY (`tipoPro`);
+
+--
+-- Indices de la tabla `tratamiento`
+--
+ALTER TABLE `tratamiento`
+  ADD PRIMARY KEY (`idTrata`);
+
+--
+-- Indices de la tabla `trata_masc`
+--
+ALTER TABLE `trata_masc`
+  ADD PRIMARY KEY (`idMasc`,`idTrata`,`idFact`),
+  ADD KEY `FK_idTrata` (`idTrata`),
+  ADD KEY `FK_idFact` (`idFact`);
 
 --
 -- Indices de la tabla `veterinario`
@@ -313,9 +261,7 @@ ALTER TABLE `veterinario`
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
-ALTER TABLE `tratamiento`
-    ADD PRIMARY KEY (`idTrata`);
-    MODIFY `idTrata` int(100) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `factura`
 --
@@ -325,22 +271,22 @@ ALTER TABLE `factura`
 -- AUTO_INCREMENT de la tabla `mascota`
 --
 ALTER TABLE `mascota`
-  MODIFY `idMasc` int(254) NOT NULL AUTO_INCREMENT;
+  MODIFY `idMasc` int(254) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `idProducto` int(254) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idProducto` int(254) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `recibo`
 --
 ALTER TABLE `recibo`
-  MODIFY `idRec` int(254) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `idRec` int(254) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT de la tabla `tarea`
+-- AUTO_INCREMENT de la tabla `tratamiento`
 --
-ALTER TABLE `tarea`
-  MODIFY `idTarea` int(254) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tratamiento`
+  MODIFY `idTrata` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13235;
 --
 -- Restricciones para tablas volcadas
 --
@@ -349,54 +295,32 @@ ALTER TABLE `tarea`
 -- Filtros para la tabla `cliente_producto`
 --
 ALTER TABLE `cliente_producto`
-    ADD CONSTRAINT `cliente_producto_ibfk_1` FOREIGN KEY (`dniCli`) REFERENCES `cliente` (`dniCli`),
-    ADD CONSTRAINT `cliente_producto_ibfk_2` FOREIGN KEY (`idRec`) REFERENCES `recibo` (`idRec`),
-    ADD CONSTRAINT `cliente_producto_ibfk_3` FOREIGN KEY (`idProducto`) REFERENCES `producto` (`idProducto`);
+  ADD CONSTRAINT `cliente_producto_ibfk_1` FOREIGN KEY (`dniCli`) REFERENCES `cliente` (`dniCli`),
+  ADD CONSTRAINT `cliente_producto_ibfk_2` FOREIGN KEY (`idProducto`) REFERENCES `producto` (`idProducto`),
+  ADD CONSTRAINT `cliente_producto_ibfk_3` FOREIGN KEY (`idRec`) REFERENCES `recibo` (`idRec`);
 
---
--- Filtros para la tabla `factura`
---
-/*
-ALTER TABLE `factura`
-  ADD CONSTRAINT `FK_idTarea` FOREIGN KEY (`idTarea`) REFERENCES `tarea` (`idTarea`) ON DELETE CASCADE ON UPDATE CASCADE;
-*/
 --
 -- Filtros para la tabla `mascota`
 --
 ALTER TABLE `mascota`
-  ADD CONSTRAINT `FK_dniCli` FOREIGN KEY (`dniCli`) REFERENCES `cliente` (`dniCli`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `FK_dniVet` FOREIGN KEY (`dniVet`) REFERENCES `veterinario` (`dniVet`);
+  ADD CONSTRAINT `FK_dniCli` FOREIGN KEY (`dniCli`) REFERENCES `cliente` (`dniCli`),
+  ADD CONSTRAINT `mascota_ibfk_1` FOREIGN KEY (`dniVet`) REFERENCES `veterinario` (`dniVet`);
 
 --
 -- Filtros para la tabla `producto`
 --
 ALTER TABLE `producto`
-  ADD CONSTRAINT `FK_tipoPro` FOREIGN KEY (`tipoProducto`) REFERENCES `tipo` (`tipoPro`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_tipoPro` FOREIGN KEY (`tipoProducto`) REFERENCES `tipo` (`tipoPro`);
 
 --
--- Filtros para la tabla `producto`
+-- Filtros para la tabla `trata_masc`
 --
 ALTER TABLE `trata_masc`
-  ADD CONSTRAINT `FK_idMasc` FOREIGN KEY (`idMasc`) REFERENCES `mascota` (`idMasc`) ON DELETE CASCADE ON UPDATE CASCADE;
- ADD CONSTRAINT `FK_idTrata` FOREIGN KEY (`idTrata`) REFERENCES `tratamiento` (`idTrata`)ON DELETE CASCADE ON UPDATE CASCADE,
-ADD CONSTRAINT `FK_idFact` FOREIGN KEY (`idFact`) REFERENCES `factura` (`idFact`)ON DELETE CASCADE ON UPDATE CASCADE;
---
--- Filtros para la tabla `recibo`
---
-/*
-ALTER TABLE `recibo`
-  ADD CONSTRAINT `recibo_ibfk_1` FOREIGN KEY (`dniCliente`) REFERENCES `cliente` (`dniCli`),
-  ADD CONSTRAINT `recibo_ibfk_2` FOREIGN KEY (`idProducto`) REFERENCES `producto` (`idProducto`);
-*/
---
--- Filtros para la tabla `tarea`
---
-/*
-ALTER TABLE `tarea`
-  ADD CONSTRAINT `FK_idMasc` FOREIGN KEY (`idMasc`) REFERENCES `mascota` (`idMasc`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tarea_ibfk_1` FOREIGN KEY (`idFact`) REFERENCES `factura` (`idFact`);
+  ADD CONSTRAINT `FK_idFact` FOREIGN KEY (`idFact`) REFERENCES `factura` (`idFact`),
+  ADD CONSTRAINT `FK_idMasc` FOREIGN KEY (`idMasc`) REFERENCES `mascota` (`idMasc`),
+  ADD CONSTRAINT `FK_idTrata` FOREIGN KEY (`idTrata`) REFERENCES `tratamiento` (`idTrata`);
 COMMIT;
-*/
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
