@@ -29,7 +29,7 @@ formulario con datos clientes
     include 'conexion_bd.php';
         $form=<<<FORMULARIO
     <form action="modificar_cliente.php" method="post">
-            <h1> REGISTRAR CLIENTE </h1>
+            <h1> MODIFICAR CLIENTE </h1>
             <h2> 
 FORMULARIO;
         $form11=<<<FORM11

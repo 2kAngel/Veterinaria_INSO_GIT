@@ -29,8 +29,8 @@ and open the template in the editor.
             <a href='modificar_mascota.php'>Modificar mascota</a><br>   
             <a href='modificar_veterinario.php'>Modificar veterinario</a><br>
                 
-            <a href='.php'>Modificar producto</a><br>   
-            <a href='.php'>Modificar tratamiento</a><br>  
+            <a href='modificar_producto.php'>Modificar producto</a><br>   
+            <a href='modificar_tratamiento.php'>Modificar tratamiento</a><br>  
                 
                 
             <a href='elim_cliente.php'>Eliminar cliente</a><br>

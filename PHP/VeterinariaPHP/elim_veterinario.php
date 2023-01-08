@@ -37,7 +37,7 @@ FORM12;
         } 
         $form13=<<<FORM13
                </select><br>
-                $error;
+                $error
 FORM13;
             
         $form1=$form11.$form13;

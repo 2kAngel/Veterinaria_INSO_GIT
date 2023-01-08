@@ -4,40 +4,40 @@
 
 
     if(empty($_POST)){
-        $dniCli = "";
+        $idTrata = "";
         $error = "";
     }else{
-        $dniCli = $_POST["dniCli"];
+        $idTrata = $_POST["idTrata"];
     }
 
-    function drawForm(&$dniCli, &$error){
+    function drawForm(&$idTrata, &$error){
         
     include 'conexion_bd.php';
         $form=<<<FORMULARIO
-    <form action="elim_cliente.php" method="post">
-            <h1> ELIMINAR CLIENTE </h1>
+    <form action="elim_tratamiento.php" method="post">
+            <h1> ELIMINAR Tratamiento </h1>
             <h2> 
 FORMULARIO;
         $form11=<<<FORM11
-                DNI
-                <select name="dniCli">
+                ID tratamiento
+                <select name="idTrata">
                 
 FORM11;
         
-        $querySelect="SELECT dniCli FROM cliente;";
+        $querySelect="SELECT idTrata FROM tratamiento;";
         $res_tipo=mysqli_query($conex, $querySelect) or die (mysql_error());
         if (mysqli_num_rows($res_tipo)!=0){
             while ($reg=mysqli_fetch_array($res_tipo)){
-                $dniCli=$reg['dniCli'];
+                $idTrata=$reg['idTrata'];
                 $form11.=<<<FORM12
-                        <option  value="$dniCli">$dniCli</option>  
+                        <option  value="$idTrata">$idTrata</option>  
 FORM12;
             }
             
         } 
         $form13=<<<FORM13
                </select><br>
-                $error;
+                $error
 FORM13;
             
         $form1=$form11.$form13;
@@ -49,11 +49,11 @@ FORM13;
     }
     
  
-    function deleteCliente(&$dniCli, &$error)
+    function deleteTratamiento(&$idTrata, &$error)
     {
         include 'conexion_bd.php';
 
-        $queryUpdate="DELETE FROM `cliente` WHERE `cliente`.`dniCli` = '$dniCli'";
+        $queryUpdate="DELETE FROM `tratamiento` WHERE `tratamiento`.`idTrata` = '$idTrata'";
                 
         if(!mysqli_query($conex,$queryUpdate)){
             $error= "valores introducidos no válidos";
@@ -71,19 +71,19 @@ FORM13;
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-        <title>Documento eliminar cliente</title>
+        <title>Documento eliminar tratamiento</title>
     </head>
 
     <body>
         <?php
         
     if (empty($_POST))/*Rutina inicial*/{
-        drawForm($dniCli, $error);
+        drawForm($idTrata, $error);
     }else{/*Rutina segunda vuelta*/
-        if(deleteCliente($dniCli, $error)){
+        if(deleteTratamiento($idTrata, $error)){
             header("Location: menuVeterinario.php");
         }
-        drawForm($dniCli, $error);
+        drawForm($idTrata, $error);
     }
         ?>
         <input type="submit" name="Eliminar" value="Eliminar">

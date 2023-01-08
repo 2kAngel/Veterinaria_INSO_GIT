@@ -28,7 +28,7 @@ and open the template in the editor.
     function drawForm(&$dniCli, &$nombreCli, &$apellidoCli,&$passwordCli,&$emailCli, &$error)
     {
         $form=<<<FORMULARIO
-    <form action="cliente.php" method="post">
+    <form action="registrar_cliente.php" method="post">
             <h1> REGISTRAR CLIENTE </h1>
             <h2> 
 FORMULARIO;
