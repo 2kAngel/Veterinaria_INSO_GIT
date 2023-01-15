@@ -52,7 +52,7 @@ FORM1;
                 <input name="numVet" type="text" value="$numVet">
                 <br>
                 Contraseña
-                <input name="passwordVet" type="password" value="$passwordVet">
+                <input name="passwordVet" type="text" value="$passwordVet">
                 <br>
                 Email
                 <input name="emailVet" type="email" value="$emailVet">

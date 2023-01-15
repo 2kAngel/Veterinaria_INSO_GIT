@@ -7,64 +7,61 @@ and open the template in the editor.
 <?php
     session_start();
     include 'conexion_bd.php';
-   
+    
     if (empty($_POST)){
-        $idTrata="";
-        $tipoTrata="";
-        $precioTrata="";
-        $fechaTrata="";
+        $idProducto="";
+        $tipoProducto="";
+        $nombrePro="";
+        $stock="";
         $error="";
     }else{
-        $idTrata=$_POST["idTrata"];
-        $tipoTrata=$_POST["tipoTrata"];
-        $precioTrata=$_POST["precioTrata"];
-        $fechaTrata=$_POST["fechaTrata"];
+        $idProducto=$_POST["idProducto"];
+        $tipoProducto=$_POST["tipoProducto"];
+        $nombrePro=$_POST["nombrePro"];
+        $stock=$_POST["stock"];
     }
     $error = '';
 
     
-    function drawForm($idTrata, $tipoTrata, $precioTrata,$fechaTrata,$error){
+    function drawForm($idProducto,$tipoProducto,$nombrePro,$stock,$error){
         
     include 'conexion_bd.php';
         $form=<<<FORMULARIO
-    <form action="modificar_tratamiento.php" method="post">
-            <h1> Modificar Tratamiento </h1>
+    <form action="modificar_producto.php" method="post">
+            <h1> Modificar Producto </h1>
             <h2> 
 FORMULARIO;
         
-        /***********DESPLEGABLE Tratamiento***********/
+        /***********DESPLEGABLE Producto***********/
         $form11=<<<FORM11
-                idTrata
-                <select name="idTrata">
+                idProducto
+                <select name="idProducto">
 FORM11;
-        $querySelect="SELECT idTrata FROM tratamiento;";
+        $querySelect="SELECT idProducto FROM producto;";
         $res_tipo=mysqli_query($conex, $querySelect) or die (mysql_error());
         if (mysqli_num_rows($res_tipo)!=0){
             while ($reg=mysqli_fetch_array($res_tipo)){
-                $idTrata=$reg['idTrata'];
+                $idProducto=$reg['idProducto'];
                 $form11.=<<<FORM12
-                        <option  value="$idTrata">$idTrata</option>  
+                        <option  value="$idProducto">$idProducto</option>  
 FORM12;
             }
             
         } 
         $form13=<<<FORM13
-                
-                
                </select><br>
 FORM13;
-             //idTrata, tipoTrata, precioTrata, fechaTrata
-             //'$idTrata', '$tipoTrata', '$precioTrata', '$fechaTrata'
+            
         $form1=$form11.$form13;
         $form2=<<<FORMULARIO
-                Tipo Tratamiento
-                <input name="tipoTrata" type="text" value="$tipoTrata">
+                Tipo
+                <input name="tipoProducto" type="text" value="$tipoProducto">
                 <br>
-                Precio Tratamiento
-                <input name="precioTrata" type="float" value="$precioTrata">
+                Nombre Producto
+                <input name="nombrePro" type="text" value="$nombrePro">
                 <br>
-                Fecha Tratamiento
-                <input name="fechaTrata" type="date" value="$fechaTrata">
+                Stock
+                <input name="stock" type="text" value="$stock">
                 <br>
                 
                 </h2>
@@ -79,17 +76,16 @@ FORMULARIO;
         $formFinal=$form.$form1.$form2;
 
         print $formFinal;
-       
     }
     
     
-    function updateTratamiento($idTrata, $tipoTrata, $precioTrata,$fechaTrata,$error)
+    function updateProducto($idProducto,$tipoProducto,$nombrePro,$stock,$error)
     {
         include 'conexion_bd.php';
 
-        $queryUpdate="UPDATE `tratamiento` SET  `tipoTrata` = '$tipoTrata', "
-                . "`precioTrata` = '$precioTrata', `fechaTrata` = '$fechaTrata' "
-                . "WHERE `tratamiento`.`idTrata` = '$idTrata'; ";
+        $queryUpdate="UPDATE `producto` SET `idProducto` = '$idProducto', `tipoProducto` = '$tipoProducto', "
+                . "`nombrePro` = '$nombrePro', `stock` = '$stock' "
+                . "WHERE `producto`.`idProducto` = '$idProducto'; ";
         if(!mysqli_query($conex,$queryUpdate)){
             $error= "valores introducidos no válidos";
             //mysqli_error($conex);/*Error en los datos de entrada*/
@@ -109,12 +105,12 @@ FORMULARIO;
         <?php
         
     if (empty($_POST))/*Rutina inicial*/{
-drawForm($idTrata, $tipoTrata, $precioTrata,$fechaTrata,$error);
+drawForm($idProducto,$tipoProducto,$nombrePro,$stock,$error);
     }else{/*Rutina segunda vuelta*/
-        if(updateTratamiento($idTrata, $tipoTrata, $precioTrata,$fechaTrata,$error)){
+        if(updateProducto($idProducto,$tipoProducto,$nombrePro,$stock,$error)){
             header("Location: menuVeterinario.php");
         }
-        drawForm($idTrata, $tipoTrata, $precioTrata,$fechaTrata,$error);
+        drawForm($idProducto,$tipoProducto,$nombrePro,$stock,$error);
     }
         ?>
     </body>

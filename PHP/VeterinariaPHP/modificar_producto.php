@@ -7,53 +7,47 @@ and open the template in the editor.
 <?php
     session_start();
     include 'conexion_bd.php';
-    
-    if (empty($_POST)){
-        $idProducto="";
-        $tipoProducto="";
-        $nombrePro="";
-        $stock="";
-        $error="";
-    }else{
-        $idProducto=$_POST["idProducto"];
-        $tipoProducto=$_POST["tipoProducto"];
-        $nombrePro=$_POST["nombrePro"];
-        $stock=$_POST["stock"];
-    }
-    $error = '';
 
-    
-    function drawForm($idProducto,$tipoProducto,$nombrePro,$stock,$error){
+
+    function drawForm($idProductoSel,$tipoProducto,$nombrePro,$stock,$error){
         
     include 'conexion_bd.php';
-        $form=<<<FORMULARIO
-    <form action="modificar_producto.php" method="post">
-            <h1> Modificar Producto </h1>
-            <h2> 
-FORMULARIO;
-        
-        /***********DESPLEGABLE Producto***********/
-        $form11=<<<FORM11
-                idProducto
-                <select name="idProducto">
-FORM11;
+
+    print "<form action='modificar_producto.php' method='post'>";
+    print "<h1> Modificar Producto </h1>";
+ 
+        include 'conexion_bd.php';
+          
         $querySelect="SELECT idProducto FROM producto;";
         $res_tipo=mysqli_query($conex, $querySelect) or die (mysql_error());
-        if (mysqli_num_rows($res_tipo)!=0){
-            while ($reg=mysqli_fetch_array($res_tipo)){
-                $idProducto=$reg['idProducto'];
-                $form11.=<<<FORM12
-                        <option  value="$idProducto">$idProducto</option>  
-FORM12;
+
+        print("<h2>idProducto: </h2>");
+
+        if (mysqli_num_rows($res_tipo)!=0)
+        {
+            print ("<select name='idProducto'>");
+
+             while ($reg=mysqli_fetch_array($res_tipo))
+            {
+                $idProducto = $reg['idProducto'];
+           
+                if ($idProductoSel == $idProducto)  
+                    print ("<option value='$idProducto' selected> $idProducto");
+                else
+                    print ("<option value='$idProducto'> $idProducto"); 
             }
-            
-        } 
-        $form13=<<<FORM13
-               </select><br>
-FORM13;
-            
-        $form1=$form11.$form13;
+             
+            print("</select>");
+
+        }else           
+        {
+            print ("<p>No hay ningun producto</p>");
+        }
+        
+        
+        //---------------------------------------------------------------
         $form2=<<<FORMULARIO
+                <h2>
                 Tipo
                 <input name="tipoProducto" type="text" value="$tipoProducto">
                 <br>
@@ -69,11 +63,12 @@ FORM13;
                 <br>
                 <br>
                 <input type="submit" name="Submit" value="Modificar">
+                </h2>
     </form>
                 
 FORMULARIO;
         
-        $formFinal=$form.$form1.$form2;
+        $formFinal=$form2;
 
         print $formFinal;
     }
@@ -103,9 +98,48 @@ FORMULARIO;
     </head>
     <body>
         <?php
+            
+    if (empty($_POST)){
+        $idProducto= null;
+        $tipoProducto= null;
+        $nombrePro= null;
+        $stock= null;
+   
+    }else{
+        $idProducto=$_POST["idProducto"];
+        $tipoProducto=$_POST["tipoProducto"];
+        $nombrePro=$_POST["nombrePro"];
+        $stock=$_POST["stock"];
+    }
+    
+    $error = '';
         
-    if (empty($_POST))/*Rutina inicial*/{
-drawForm($idProducto,$tipoProducto,$nombrePro,$stock,$error);
+    if (empty($_POST) ||  ($_POST["idProducto"] != null && $tipoProducto== null && $nombrePro== null && $stock== null))/*Rutina inicial*/{
+        
+        if (empty($_POST)){
+            $idProducto= null;
+            $tipoProducto= null;
+            $nombrePro= null;
+            $stock= null;
+
+        } elseif ($_POST["idProducto"] != null && $tipoProducto== null && $nombrePro== null && $stock== null){
+
+            $idProducto= $_POST["idProducto"];
+
+            $querySelect="SELECT * FROM producto WHERE idProducto = '$idProducto';";
+
+            $res_cli=mysqli_query($conex, $querySelect) or die (mysql_error());
+            if (mysqli_num_rows($res_cli)!=0){
+                while ($reg=mysqli_fetch_array($res_cli)){
+                    $tipoProducto=$reg['tipoProducto'];
+                    $nombrePro=$reg['nombrePro'];
+                    $stock=$reg['stock'];
+                    $error="";
+                }
+            }
+        }
+        
+        drawForm($idProducto,$tipoProducto,$nombrePro,$stock,$error);
     }else{/*Rutina segunda vuelta*/
         if(updateProducto($idProducto,$tipoProducto,$nombrePro,$stock,$error)){
             header("Location: menuVeterinario.php");

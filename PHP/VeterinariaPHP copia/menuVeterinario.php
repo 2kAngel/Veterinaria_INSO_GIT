@@ -11,7 +11,8 @@ and open the template in the editor.
     </head>
     <body>
         <h2>
-         Menu Veterinario
+        
+        
         </h2>
         <?php
         
@@ -38,7 +39,10 @@ and open the template in the editor.
             <a href='elim_producto.php'>Eliminar producto</a><br>   
             <a href='elim_tratamiento.php'>Eliminar tratamiento</a><br>  
                 
-            <a href='registrar_trata_masc.php'>Generar factura (trata-masc)</a><br>    
+                
+            <a href='.php'>Generar factura (trata-masc)</a><br>  
+      
+            
 FORM;
         print $form;
         ?>

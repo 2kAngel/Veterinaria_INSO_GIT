@@ -2,6 +2,7 @@
 
     function drawForm($dniCliSel, $password)
     {
+        
         print " <form action='loginCliente.php' method='post'>";
                    
         include 'conexion_bd.php';
@@ -33,9 +34,7 @@
             print ("<p>No hay ninguna clientes</p>");
         }
         
-        print "<p>Contraseña: <input name='password' type='password' value='$password'></p>";
-        
-        print "<input type='submit' name='Submit' value='Enviar'>";
+        print "<input name='password' type='text' value='$password'>";
         
         print "</form>";
      }
@@ -43,17 +42,24 @@
     function validar (&$dniCliSel, &$password, &$error)
     {
         $valida = true;
-    
+        //Debe de empezar con 8 números y terminar con una letra mayúscula
+        if (($dniCliSel == "") || (!preg_match("/^[0-9]{8}[A-Z]$/",$dniCliSel))){             
+            $error =  $error."Nif invalido";                    //Concatenar ese error en los errores
+            $nif = "";                                          //Devolver el parámetro para cuando se vuelva a mostrar vacio
+            $valida = false; 
+        }
+        
+        
         include 'conexion_bd.php';
         
-        $query_conv = "SELECT passwordCli FROM cliente 
-                                    WHERE dniCli = '$dniCliSel'"; 
+        $query_conv = "SELECT password FROM cliente 
+                                    WHERE dniCli = $dniCliSel"; 
 
         $result_con = mysqli_query($conex, $query_conv) or die(mysqli_error($conex));
 
         $reg_con = mysqli_fetch_array($result_con);
         
-        if ($reg_con['passwordCli'] != $password)
+        if ($reg_con != $password)
         {
             $error =  $error."Contraseña incorrecta";                    //Concatenar ese error en los errores
             $reg_con = "";                                          //Devolver el parámetro para cuando se vuelva a mostrar vacio
@@ -92,20 +98,9 @@
       }
       else
       {
-            include 'conexion_bd.php';
-                  
-            $query_conv = "SELECT nombreCli FROM cliente WHERE dniCli = '$dniCliSel'"; 
-
-            $result_con = mysqli_query($conex, $query_conv) or die(mysqli_error($conex));
-
-            if ($reg_con = mysqli_fetch_array($result_con))
-            {
-                $nombreCli = $reg_con['nombreCli'];
-                 
-                $_SESSION['$dniCliSel'] = $dniCliSel;
-                $_SESSION['nombreCli'] = $nombreCli;
-                header("location: menuCliente.php"); 
-            }
+            $_SESSION['$dniCliSel'] = $dniCliSel;
+            $_SESSION['$password'] = $password;
+            header("location: menuCliente.php"); 
       }
      
     }

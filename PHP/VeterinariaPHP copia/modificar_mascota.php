@@ -54,7 +54,7 @@ FORM12;
                </select><br>
 FORM13;
             
-        $form1=$form.$form11.$form13;
+        $form1=$form11.$form13;
         
         
         /***********DESPLEGABLE CLIENTE***********/
@@ -95,44 +95,31 @@ FORM32;
             }
         } 
         $form33=<<<FORM33
-               </select><br> </h2>
+               </select><br>
 FORM33;
         $form3=$form31.$form33;
         
-        print $form1.$form2.$form3;
         
-        print "<h2>";
-         print "<p> <input type='radio' name = 'sexo' value='H'";
-        if ($sexo == 'H') 
-            print "checked> Hembra </p>";
-        else
-            print "> Hembra </p>";
-
-        print "<p> <input type='radio' name = 'sexo' value='M'";
-
-        if ($sexo == 'M') 
-            print "checked> Macho </p>";
-        else
-            print "> Macho </p>";
-         print "</h2>";
         
         $form4=<<<FORMULARIO
-                <h2>
                 Tipo de animal
                 <input name="tipoAnimal" type="text" value="$tipoAnimal">
                 <br>
-      
+                Sexo
+                <input name="sexo" type="text" value="$sexo">
+                <br>
+                </h2>
                 <h3>$error </h3>
                 <br>
                 <br>
                 <input type="submit" name="Submit" value="Modificar">
-                </h2>
-                </form>
+    </form>
+                
 FORMULARIO;
         
-        print $form4;
-      
-        
+        $formFinal=$form.$form1.$form2.$form3.$form4;
+
+        print $formFinal;
     }
     
     

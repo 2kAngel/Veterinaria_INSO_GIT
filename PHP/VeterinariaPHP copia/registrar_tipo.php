@@ -30,7 +30,6 @@ and open the template in the editor.
 {
 $form=<<<FORMULARIO
             <form action="registrar_tipo.php" method="post">
-            <h1> Registrar Tipo Producto </h1>
             <h2>  
 FORMULARIO;
         

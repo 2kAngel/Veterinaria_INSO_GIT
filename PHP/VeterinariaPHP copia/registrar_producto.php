@@ -3,12 +3,10 @@
     session_start();
     include 'conexion_bd.php';
     
-    function mandarDatos( $tipoProducto, $nombrePro, $stock)
+    function mandarDatos($idProducto, $tipoProducto, $nombrePro, $stock)
     {
         include 'conexion_bd.php';
 
-        $idProducto = null;
-        
         $queryInsert="INSERT INTO producto (idProducto, tipoProducto, nombrePro, stock) 
                       VALUES ('$idProducto', '$tipoProducto', '$nombrePro', '$stock');";
         
@@ -20,7 +18,7 @@
         return true; 
     }
     
-    function drawForm( $tipoProductoSel, $nombrePro, $stock)
+    function drawForm($idProducto, $tipoProductoSel, $nombrePro, $stock)
 {
          print "<form action='registrar_producto.php' method='post'>";
 $form=<<<FORMULARIO
@@ -28,6 +26,20 @@ $form=<<<FORMULARIO
             <h2>  
 FORMULARIO;
         
+        if(!empty($_POST) && $idProducto==""){ /***codrefen mal*/
+$form1=<<<FORM1
+                Id producto
+                    <input name="idProducto" type="text" value="$idProducto">  
+                    <br>
+FORM1;
+        }else{ /****************************codrefen bien*/
+$form1=<<<FORM1
+                Id de producto
+                <input name="idProducto" type="text" value="$idProducto">
+                <br>
+FORM1;
+        }
+  
      //CASO 1.1
     //PASO 0
     include 'conexion_bd.php';
@@ -83,16 +95,20 @@ $form4=<<<FORMULARIO
                 <input type="submit" name="Submit" value="Añadir">
 FORMULARIO;
         
-        $formFinal=$form.$form3.$form4;
+        $formFinal=$form.$form1.$form3.$form4;
         
         print $formFinal;
         
         print "</form>";
     }
     
-    function validar( &$nombrePro, &$stock ,&$error)
+    function validar(&$idProducto, &$nombrePro, &$stock ,&$error)
     {
-        $valida = true;  
+        $valida = true;
+        if($idProducto == ""){
+            $error=$error." Error: El id de producto debe introducirse";
+            $valida = false;
+        }
         
         if($nombrePro == ""){
             $error=$error. " El nombre de producto debe introducirse";
@@ -119,12 +135,14 @@ FORMULARIO;
 
 if (empty($_POST)){
 
+        $idProducto = "";
         $tipoProducto= null;
         $nombrePro = "";
         $stock = 0;
         
     }else{
         
+        $idProducto = $_POST["idProducto"];
         $tipoProducto= $_POST["tipos"];
         $nombrePro = $_POST["nombrePro"];
         $stock = $_POST["stock"];
@@ -135,16 +153,16 @@ if (empty($_POST)){
     
     if (empty($_POST))/*Rutina inicial*/
     {
-       drawForm( $tipoProducto, $nombrePro, $stock);
+       drawForm($idProducto, $tipoProducto, $nombrePro, $stock);
     }else{/*Rutina segunda vuelta*/
-        if(validar( $nombrePro, $stock ,$error)){
-            if(mandarDatos( $tipoProducto, $nombrePro, $stock)){
+        if(validar($idProducto, $nombrePro, $stock ,$error)){
+            if(mandarDatos($idProducto, $tipoProducto, $nombrePro, $stock)){
                 header("Location: menuVeterinario.php");
             }  
         } else  
         {
             print $error;
-            drawForm( $tipoProducto, $nombrePro, $stock);
+            drawForm($idProducto, $tipoProducto, $nombrePro, $stock);
         }
     
     }

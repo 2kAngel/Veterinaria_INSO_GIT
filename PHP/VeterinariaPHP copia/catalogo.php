@@ -4,15 +4,36 @@ se guarda en la sesión una estructura STACK con el orden de los objetos
 se guarda en el post una lista con todas las cantidades
 -->
 <?php
+if(session_status()=="PHP_SESSION_ACTIVE"){}
+else{session_start();}
 
-session_start();
 
-function draw_catalogo(&$dni, &$nombre){
+if (empty($_POST)){
+        $tipoPro = "";
+    }else{
+        $tipoPro = $_POST["tipoPro"];
+
+    }
+    
+    if(!empty($_SESSION['dni'])){$dni = $_SESSION['dni'];}
+    if(!empty($_SESSION['nombre'])){$nombre = $_SESSION['nombre'];}
+    if(!empty($_SESSION['apellido'])){$apellido= $_SESSION['apellido'];}
+    if(!empty($_SESSION['numProds'])){$numProds= $_SESSION['numProds'];}
+    else{$numProds=0;}
+    
+    $stack=array();
+    //if(!empty($_SESSION['STACK'])){$stack = $_SESSION['STACK'];}
+    //if(!empty($_SESSION['STACK'])){$_SESSION['STACK']=array();}
+    //$_SESSION['contra'] = $reg_cliente['passwordCli'];
+    //$email= $_SESSION['email'];
+
+
+function draw_catalogo(&$dni,&$nombre,&$apellido){
     include 'conexion_bd.php';
     
     $header=<<<FORM
             <h1>
-            Bienvenido $nombre 
+            Bienvenido $nombre $apellido.
             </h1>
             <br>
             <h2>
@@ -23,7 +44,6 @@ FORM;
     
     $query_tipo="SELECT tipoPro, precio
 			FROM tipo;";
-    
     $res_tipo=mysqli_query($conex, $query_tipo) or die (mysql_error());
     
     if (mysqli_num_rows($res_tipo)!=0){
@@ -45,7 +65,7 @@ FORMTIPO;
             $dataTabla.=<<<DATA
                     <tr>
                         <td><input type="submit" name="tipoPro" value="$tipoPro" /></td>
-                        <td>$precio €</td>
+                        <td>$precio €$</td>
                     </tr>
 DATA;
 	}
@@ -68,20 +88,18 @@ TABLA_COMPLETA;
     }
 }
 
-function draw_catalogo_prod(&$tipoPro, &$stack, &$nombre, &$apellido, &$numProdsAnterior){
-    
+function draw_catalogo_prod(&$tipoPro, &$stack, &$nombre,&$apellido,&$numProdsAnterior){
     include 'conexion_bd.php';
+    session_start();
     
     $precio =getPrecio($tipoPro);
     if($precio <0){
         print 'error en la recuperación de precio';
         return -1;
     }
-    
     $query_producto="SELECT idProducto, nombrePro, stock 
 			FROM producto
 			WHERE tipoProducto like '$tipoPro'; ";
-    
     $res_tipo=mysqli_query($conex, $query_producto) or die (mysql_error());
 
     $header=<<<FORM
@@ -110,9 +128,7 @@ FORM;
 FORMPROD;
         
         $i=$numProdsAnterior;
-        
         $dataTabla="";
-        
         while ($reg=mysqli_fetch_array($res_tipo)){
             $nombrePro=$reg['nombrePro'];
             $stock=intval($reg['stock']);
@@ -120,20 +136,17 @@ FORMPROD;
             $dataTabla.=<<<DATA
                     <tr>
                         <td>$nombrePro</td>
-                        <td>$precio €</td>
+                        <td>$precio €$</td>
                         <td>$stock unidades</td>
                         <td><input name="$cantidad" type="number" value="0" min="0" max="$stock"></td>
                     </tr>
 DATA;
-            $i++; //añadimos este nuevo producto
-            
-            $stack[] = array(array($reg['idProducto'], $nombrePro, $stock, $cantidad, $precio)); //Array donde se guarda la info
+            $i++;
+            $stack[]=array(array($reg['idProducto'],$nombrePro,$stock,$cantidad,$precio)); //Array donde se guarda la info
         }
         
-        $_SESSION['STACK']= $stack; //Array guardado en session
-        
-        $_SESSION['numProds']= $i;
-        
+        $_SESSION['STACK']=$stack;//Array guardado en session
+        $_SESSION['numProds']=$i;
         $tabla_foot=<<<PIE
                 </table>
             <input type="submit" name="Submit" value="Añadir al carrito">
@@ -175,25 +188,6 @@ function getPrecio($tipoPro){
     </head>
     <body>
         <?php
-        
-
-if (empty($_POST)){
-        $tipoPro = "";
-    }else{
-        $tipoPro = $_POST["tipoPro"];
-    }
-     
-    if(!empty($_SESSION['$dniCliSel'])){$dni = $_SESSION['$dniCliSel'];}
-    if(!empty($_SESSION['nombreCli'])){$nombre = $_SESSION['nombreCli'];}
-    if(!empty($_SESSION['numProds'])){$numProds= $_SESSION['numProds'];}
-    else{$numProds=0;}
-    
-    $stack = array();
-    //if(!empty($_SESSION['STACK'])){$stack = $_SESSION['STACK'];}
-    //if(!empty($_SESSION['STACK'])){$_SESSION['STACK']=array();}
-    //$_SESSION['contra'] = $reg_cliente['passwordCli'];
-    //$email= $_SESSION['email'];        
-           
 if (empty($_POST))/*Rutina inicial*/
 {
    draw_catalogo($dni,$nombre,$apellido); 
@@ -202,7 +196,7 @@ if (empty($_POST))/*Rutina inicial*/
 
         //$_SESSION['DNI'] = $dni;
         //header("Location: catalogo2.php");
-        draw_catalogo_prod($tipoPro, $stack ,$nombre, $apellido, $numProds);
+        draw_catalogo_prod($tipoPro, $stack ,$nombre,$apellido, $numProds);
 }
         ?>
     </body>

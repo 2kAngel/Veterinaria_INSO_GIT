@@ -1,18 +1,22 @@
+
+
 <?php
 
-
-session_start();
+    session_start();
 
     $dniCliSel = $_SESSION['$dniCliSel'];
-    $password = $_SESSION['$password'];
-            
-        print "<a href='registrar_mascota.php'>Registrar mascota</a><br>";
-        
-        print "<a href='.php'>Modificar su propio registro</a><br>";
-        
-        print "<a href='.php'>Eliminar su propio registro</a><br>";
-        
-        print "<a href='.php'>Generar recibo (cliente-producto)</a><br>";   
-        //Angel:no creo q esto lo tenga q hacer el cliente , but...?
+    $nombreCli =  $_SESSION['nombreCli'];
+
+    print "<h2> Menu Cliente: $nombreCli ($dniCliSel) </h2>";
+
+    print "<a href='registrar_mascota_cli.php'>Registrar mascota </a><br>";
+
+    print "<a href='modificar_propio_cli.php'>Modificar su cuenta</a><br>";       
+
+    print "<a href='eliminar_propio_cliente.php'>Eliminar su cuenta</a><br>"; 
+
+    print "<a href='catalogo.php'>Consultar Catalogo</a><br>";                  //FALTA
+
+ 
 ?>
 

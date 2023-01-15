@@ -3,8 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/VeterinariaPHP/modificar_producto.php</file>
-            <file>file:/C:/xampp/htdocs/VeterinariaPHP/modificar_tratamiento.php</file>
+            <file>file:/C:/xampp/htdocs/veterinariaFinal/carrito.php</file>
+            <file>file:/C:/xampp/htdocs/veterinariaFinal/pedido.php</file>
+            <file>file:/C:/xampp/htdocs/veterinariaFinal/eliminar_propio_cliente.php</file>
+            <file>file:/C:/xampp/htdocs/veterinariaFinal/generar_factura.php</file>
+            <file>file:/C:/xampp/htdocs/veterinariaFinal/loginVeterinario.php</file>
+            <file>file:/C:/xampp/htdocs/veterinariaFinal/menuVeterinario.php</file>
+            <file>file:/C:/xampp/htdocs/veterinariaFinal/loginCliente.php</file>
+            <file>file:/C:/xampp/htdocs/veterinariaFinal/veterinaria.sql</file>
+            <file>file:/C:/xampp/htdocs/veterinariaFinal/catalogo.php</file>
+            <file>file:/C:/xampp/htdocs/veterinariaFinal/menuCliente.php</file>
+            <file>file:/C:/xampp/htdocs/veterinariaFinal/modificar_propio_cli.php</file>
+            <file>file:/C:/xampp/htdocs/veterinariaFinal/registrar_mascota_cli.php</file>
         </group>
     </open-files>
 </project-private>

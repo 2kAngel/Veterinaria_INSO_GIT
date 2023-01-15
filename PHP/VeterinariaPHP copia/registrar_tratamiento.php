@@ -9,11 +9,12 @@ and open the template in the editor.
     session_start();
     include 'conexion_bd.php';
     
-    function mandarDatos($tipoTrata, $precioTrata, $fechaTrata)
+    function mandarDatos($idTrata, $tipoTrata, $precioTrata, $fechaTrata)
     {
         include 'conexion_bd.php';
 
-        $idTrata = null;
+        //$precio = floatval($precioTrata);
+        //$id = intval($idTrata);
         
          $queryInsert="INSERT INTO tratamiento (idTrata, tipoTrata, precioTrata, fechaTrata) 
                       VALUES ('$idTrata', '$tipoTrata', '$precioTrata', '$fechaTrata' );";
@@ -26,13 +27,30 @@ and open the template in the editor.
           
     }
     
-    function drawForm($tipoTrata, $precioTrata, $fechaTrata)
+    function drawForm($idTrata, $tipoTrata, $precioTrata, $fechaTrata)
     {
-        print  "<form action='registrar_tratamiento.php' method='post'>";
+        
+    $form=<<<FORMULARIO
+    <form action="registrar_tratamiento.php" method="post">
+            <h1> REGISTRAR TRATAMIENTO </h1>
+            <h2> 
+FORMULARIO;
+        
+        if(!empty($_POST) && $idTrata==""){ /***codrefen mal*/
+            $form1=<<<FORM1
+                ID Tratamiento
+                <input name="idTrata" type="number" value="$idTrata" class="error">  
+                <br>
+FORM1;
+        }else{ /****************************codrefen bien*/
+            $form1=<<<FORM1
+               ID Tratamiento
+                <input name="idTrata" type="number" value="$idTrata" class="error">  
+                <br>
+FORM1;
+        }
         
         $form2=<<<FORMULARIO
- 
-                <h2>
                 Tipo tratamiento
                 <input name="tipoTrata" type="text" value="$tipoTrata">
                 <br>
@@ -50,17 +68,23 @@ and open the template in the editor.
                 
 FORMULARIO;
         
-        $formFinal=$form2;
+        $formFinal=$form.$form1.$form2;
 
         print $formFinal;
                 
-        print "</form>";
                
     }
     
-    function validar( &$tipoTrata, &$precioTrata, &$fechaTrata, &$error)
+    function validar(&$idTrata, &$tipoTrata, &$precioTrata, &$fechaTrata, &$error)
     {
         $valido = true;
+        
+         if (($idTrata == "") || (!preg_match("/^[0-9]{5}/", $idTrata)))
+        {
+            $error = $error."Formato número tratamiento incorrecto /";
+            $valido = false;
+            $idTrata = "";
+        }
         
          if ($tipoTrata == "")
         {
@@ -106,11 +130,13 @@ FORMULARIO;
     
 /*RUTINA PRINCIPAL*/
     if (empty($_POST)){
+        $idTrata = "";
         $tipoTrata="";
         $precioTrata= 0;
         $fechaTrata= null;
         $error = "";
     }else{
+        $idTrata =  $_POST["idTrata"];
         $tipoTrata =  $_POST["tipoTrata"];
         $precioTrata =  $_POST["precioTrata"];
         $fechaTrata =  $_POST["fechaTrata"];
@@ -120,16 +146,16 @@ FORMULARIO;
     
     if (empty($_POST))/*Rutina inicial*/
     {
-       drawForm( $tipoTrata, $precioTrata, $fechaTrata);
+       drawForm($idTrata, $tipoTrata, $precioTrata, $fechaTrata);
     }else{/*Rutina segunda vuelta*/
-        if(validar( $tipoTrata, $precioTrata, $fechaTrata, $error)){
-            if(mandarDatos( $tipoTrata, $precioTrata, $fechaTrata)){           
+        if(validar($idTrata, $tipoTrata, $precioTrata, $fechaTrata, $error)){
+            if(mandarDatos($idTrata, $tipoTrata, $precioTrata, $fechaTrata)){           
                 header("Location: menuVeterinario.php");
             }
         }
         else{
             print $error;    
-            drawForm( $tipoTrata, $precioTrata, $fechaTrata);
+            drawForm($idTrata, $tipoTrata, $precioTrata, $fechaTrata);
         }
     }
 ?>

@@ -7,11 +7,9 @@ and open the template in the editor.
 <?php
 
    
-    function mandarDatos ($dniCli, $dniVet, $tipoAnimal, $sexo){
+    function mandarDatos($id_mascota, $dniCli, $dniVet, $tipoAnimal, $sexo){
         include 'conexion_bd.php';
 
-        $id_mascota = null;
-        
         $queryInsert="INSERT INTO mascota (idMasc, dniCli, dniVet, tipoAnimal, sexo)
                     VALUES ('$id_mascota', '$dniCli', '$dniVet', '$tipoAnimal', '$sexo');";
                 
@@ -24,9 +22,16 @@ and open the template in the editor.
         
     }
     
-    function drawForm( $dniCliSel, $dniVetSel, $tipoAnimal, $sexo, $error){
+    function drawForm($id_mascota, $dniCliSel, $dniVetSel, $tipoAnimal, $sexo, $error){
+        $form=<<<FORMULARIO
+            <form action="registrar_mascota.php" method="post"> 
+            Id Mascota:
+            <input name="id_mascota" type="text" value="$id_mascota">
+            <br>
+FORMULARIO;
+        
+        print $form;
                    
-         print  "<form action='registrar_mascota.php' method='post'>";
         include 'conexion_bd.php';
         
         $query_conv = "SELECT dniCli FROM cliente "; 
@@ -106,8 +111,6 @@ and open the template in the editor.
 FORMULARIO;
         
         print $form3;
-        
-        print "</form>";
     }
     
     function validar(&$tipoAnimal,&$error){
@@ -131,12 +134,14 @@ FORMULARIO;
     include 'conexion_bd.php';
     /*RUTINA PRINCIPAL*/
 if (empty($_POST)){
+        $id_mascota = NULL;
         $dniCliSel = NULL;
         $dniVetSel = NULL;
         $tipoAnimal = NULL;
         $sexo = NULL;
         $error="";
     }else{
+        $id_mascota = $_POST["id_mascota"];
         $dniCliSel =  $_POST["clientes"];
         $dniVetSel =  $_POST["veterinarios"];
         $tipoAnimal = $_POST["tipoAnimal"];
@@ -146,15 +151,15 @@ if (empty($_POST)){
     
     if (empty($_POST))/*Rutina inicial*/
     {
-       drawForm( $dniCliSel, $dniVetSel, $tipoAnimal, $sexo, $error);
+       drawForm($id_mascota, $dniCliSel, $dniVetSel, $tipoAnimal, $sexo, $error);
     }else{
     /*Rutina segunda vuelta*/
     if(validar($tipoAnimal, $error)){
-        if(mandarDatos($dniCliSel, $dniVetSel, $tipoAnimal, $sexo)){
+        if(mandarDatos($id_mascota, $dniCliSel, $dniVetSel, $tipoAnimal, $sexo)){
             header("Location: menuVeterinario.php");
         }
     }
-    drawForm( $dniCliSel, $dniVetSel, $tipoAnimal, $sexo, $error);
+    drawForm($id_mascota, $dniCliSel, $dniVetSel, $tipoAnimal, $sexo, $error);
     }
     
 ?>

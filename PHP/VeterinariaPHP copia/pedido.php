@@ -15,29 +15,18 @@ function actualizarValor(&$idProd,&$cantidad,&$stock, &$dniCli, &$total){
     $stocActualizado=0;
     $stocActualizado=intval($stock) - intval($cantidad);
     $query_producto="UPDATE `producto`  "
-            . "SET `stock` = '$stocActualizado' "
-            . "WHERE `idProducto` = '$idProd';";
+            . "SET 'stock' = '$stocActualizado' "
+            . "WHERE 'idProducto' = '$idProd';";
     
+    $query_Cliente_Producto="INSERT INTO `cliente-producto` (`dniCli`,`idProducto`,`cantidad`) "
+            . "VALUES ('$dniCli','$idProd','$cantidad');";
     
-    $hoy=strval(date("d.m.y H:s"));
-    $query_Recibo="INSERT INTO `recibo` (`idRec`,`fechaRec`, `precioRec`) "
-            . "VALUES (NULL,'$hoy','$total');";
+    $hoy=strval(date("d.m.y"));
+    $query_Recibo="INSERT INTO `recibo` (`numRec`, `dniCliente`, `idProducto`, `fechaRec`, `precioRec`) "
+            . "VALUES (NULL,'$dniCli','$idProd','$hoy','$total');";
+    
     $res_valid=mysqli_query($conex,$query_Recibo) 
                         or die (mysqli_error($conex));
-    
-    
-    $querySelect="SELECT idRec FROM recibo "
-            . "WHERE `fechaRec` = '$hoy' AND `precioRec` =  '$total';";
-    $idRec=0;
-    $res_Sel=mysqli_query($conex, $querySelect) or die (mysqli_error($conex));
-    if (mysqli_num_rows($res_Sel)!=0){
-            $reg=mysqli_fetch_array($res_Sel);
-            $idRec=$reg['idRec'];
-    }
-    $query_Cliente_Producto="INSERT INTO `cliente_producto` (`dniCli`,`idRec`,`idProducto`,`cantidad`) "
-            . "VALUES ('$dniCli','$idRec','$idProd','$cantidad');";
-    
-    
     $res_valid=mysqli_query($conex,$query_producto) 
                         or die (mysqli_error($conex));
     $res_valid=mysqli_query($conex,$query_Cliente_Producto) 
@@ -128,8 +117,6 @@ FORMREP4;
                     TOTAL:$total €$
                     Pago realizado<br>
             </form>
-            <form action="catalogo.php" method="post">
-            
             
                 </h2>
 

@@ -13,8 +13,7 @@ session_start();
 
         //print $_SESSION['numProds'];
         $stack[][]=$_SESSION['STACK'];
-        
-        $i= $j = 0;
+        $i=$j=0;
         $id='';
         $nombre='';
         $stock='';
