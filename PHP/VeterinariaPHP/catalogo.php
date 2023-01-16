@@ -7,7 +7,7 @@ se guarda en el post una lista con todas las cantidades
 
 session_start();
 
-function draw_catalogo(&$dni, &$nombre){
+function draw_catalogo($dni, $nombre){
     include 'conexion_bd.php';
     
     $header=<<<FORM
@@ -68,7 +68,7 @@ TABLA_COMPLETA;
     }
 }
 
-function draw_catalogo_prod(&$tipoPro, &$stack, &$nombre, &$apellido, &$numProdsAnterior){
+function draw_catalogo_prod($tipoPro, $stack, $nombre, $numProdsAnterior){
     
     include 'conexion_bd.php';
     
@@ -86,7 +86,7 @@ function draw_catalogo_prod(&$tipoPro, &$stack, &$nombre, &$apellido, &$numProds
 
     $header=<<<FORM
             <h1>
-            Bienvenido $nombre $apellido.
+            Bienvenido $nombre.
             </h1>
             <br>
             <h2>
@@ -116,18 +116,18 @@ FORMPROD;
         while ($reg=mysqli_fetch_array($res_tipo)){
             $nombrePro=$reg['nombrePro'];
             $stock=intval($reg['stock']);
-            $cantidad="cantidad".$i; //Nombre de la variable POST donde se guarda
+            $NomCantidad="cantidad".$i; //Nombre de la variable POST donde se guarda "cantidad0",
             $dataTabla.=<<<DATA
                     <tr>
                         <td>$nombrePro</td>
                         <td>$precio €</td>
                         <td>$stock unidades</td>
-                        <td><input name="$cantidad" type="number" value="0" min="0" max="$stock"></td>
+                        <td><input name="$NomCantidad" type="number" value="0" min="0" max="$stock"></td>
                     </tr>
 DATA;
             $i++; //añadimos este nuevo producto
             
-            $stack[] = array(array($reg['idProducto'], $nombrePro, $stock, $cantidad, $precio)); //Array donde se guarda la info
+            $stack[] = array(array($reg['idProducto'], $nombrePro, $stock, $precio)); //Array donde se guarda la info
         }
         
         $_SESSION['STACK']= $stack; //Array guardado en session
@@ -176,6 +176,11 @@ function getPrecio($tipoPro){
     <body>
         <?php
         
+        
+        
+        
+        
+        
 
 if (empty($_POST)){
         $tipoPro = "";
@@ -187,7 +192,7 @@ if (empty($_POST)){
     if(!empty($_SESSION['nombreCli'])){$nombre = $_SESSION['nombreCli'];}
     if(!empty($_SESSION['numProds'])){$numProds= $_SESSION['numProds'];}
     else{$numProds=0;}
-    
+    $numProds=0;
     $stack = array();
     //if(!empty($_SESSION['STACK'])){$stack = $_SESSION['STACK'];}
     //if(!empty($_SESSION['STACK'])){$_SESSION['STACK']=array();}
@@ -196,13 +201,13 @@ if (empty($_POST)){
            
 if (empty($_POST))/*Rutina inicial*/
 {
-   draw_catalogo($dni,$nombre,$apellido); 
+   draw_catalogo($dni,$nombre); 
    
 }else{/*Rutina segunda vuelta*/
 
         //$_SESSION['DNI'] = $dni;
         //header("Location: catalogo2.php");
-        draw_catalogo_prod($tipoPro, $stack ,$nombre, $apellido, $numProds);
+        draw_catalogo_prod($tipoPro, $stack ,$nombre, $numProds);
 }
         ?>
     </body>

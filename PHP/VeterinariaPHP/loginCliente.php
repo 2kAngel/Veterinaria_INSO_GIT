@@ -1,4 +1,8 @@
 <?php
+session_start();
+
+
+
 
     function drawForm($dniCliSel, $password)
     {
@@ -64,7 +68,6 @@
     }
     
     
-    session_start();
     
     if(empty($_POST))
     {                

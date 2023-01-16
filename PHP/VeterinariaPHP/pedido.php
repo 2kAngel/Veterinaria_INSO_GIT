@@ -7,7 +7,7 @@ and open the template in the editor.
 <?php
 session_start();
 
-if(!empty($_SESSION['DNI'])){$dniCli=$_SESSION['DNI'];}
+if(!empty($_SESSION['$dniCliSel'])){$dniCli=$_SESSION['$dniCliSel'];}
 
 
 function actualizarValor(&$idProd,&$cantidad,&$stock, &$dniCli, &$total){
@@ -24,7 +24,7 @@ function actualizarValor(&$idProd,&$cantidad,&$stock, &$dniCli, &$total){
             . "VALUES (NULL,'$hoy','$total');";
     $res_valid=mysqli_query($conex,$query_Recibo) 
                         or die (mysqli_error($conex));
-    
+    //print "VALUES (NULL,'$hoy','$total');<br><br>";
     
     $querySelect="SELECT idRec FROM recibo "
             . "WHERE `fechaRec` = '$hoy' AND `precioRec` =  '$total';";
@@ -34,7 +34,9 @@ function actualizarValor(&$idProd,&$cantidad,&$stock, &$dniCli, &$total){
             $reg=mysqli_fetch_array($res_Sel);
             $idRec=$reg['idRec'];
     }
-    $query_Cliente_Producto="INSERT INTO `cliente_producto` (`dniCli`,`idRec`,`idProducto`,`cantidad`) "
+    
+    //print $idRec."<br><br>";
+    $query_Cliente_Producto="INSERT INTO cliente_producto (dniCli,idRec,idProducto,cantidad) "
             . "VALUES ('$dniCli','$idRec','$idProd','$cantidad');";
     
     
@@ -47,7 +49,7 @@ function actualizarValor(&$idProd,&$cantidad,&$stock, &$dniCli, &$total){
 
 
 $head=<<<HEAD
-            <form action="pedido.php" method="post">
+            <form action="menuCliente.php" method="post">
                 <table width="70%"  border="1" cellspacing="1" cellpadding="1">
                     <tr>
                         <th>ID Producto</th>
@@ -59,12 +61,7 @@ $head=<<<HEAD
 HEAD;
 
 $i=0;$j=0;
-$idProd='';
-$nombre='';
-$stock=0;
-$cantidad=0;
-$precio=0;
-$total=0;
+$idProd='';$nombre='';$stock=0;$cantidad=0;$precio=0;$total=0;
 $formProd='';$formProd1='';$formProd2='';$formProd3='';$formProd4='';$formAux='';
 foreach ($_SESSION['STACK'] as $value) {
             foreach ($value as $value2){
@@ -74,48 +71,41 @@ foreach ($_SESSION['STACK'] as $value) {
                             $idProd=$value3;
                             $formProd=<<<FORMREP
                                     <tr>
-                                    <td>$value3</td>
-                                    
+                                    <td>$idProd</td>
 FORMREP;
                             break;
                         case 1:
                             $nombre = $value3;
-                            $formProd1=<<<FORMREP1
-                                    
-                                    <td>$value3</td>
-                                    
+                            $formProd.=<<<FORMREP1
+                                    <td>$nombre</td>
 FORMREP1;
-                            $formAux=$formAux.$formProd;
                             break;
                         case 2:
                             $stock=$value3;
-                            $formProd2=<<<FORMREP2
-                                    
-                                    <td>$value3</td>
-FORMREP2;
-                        case 3:
-                            $cantidad=0;
                             $cantidad= $_SESSION["cantidad".$j];
-                            $formProd3=<<<FORMREP3
+                            $_SESSION["cantidad".$j] = "";
+                        
+                            $formProd.=<<<FORMREP2
+                                    <td>$stock</td>
                                     <td>$cantidad</td>
-                                    
-FORMREP3;
-                            //$cantidad=$value3;
+FORMREP2;
                             break;
-                        case 4:
+                        case 3:
                             $precio=$value3;
-                            $formProd4=<<<FORMREP4
-                                    
-                                    <td>$value3</td>
+                            $formProd.=<<<FORMREP4
+                                    <td>$precio</td>
                                     </tr>
 FORMREP4;
-                            $head=$head.$formProd.$formProd1.$formProd2.$formProd3.$formProd4;
+                            $head=$head.$formProd;
                             $total=$total+(doubleval($cantidad) * doubleval($precio));
                             actualizarValor($idProd,$cantidad,$stock,$dniCli,$total);
                             break;
                         default:
                             break;
                     }
+                    $formProd.=<<<FORMREP5
+                            
+FORMREP5;
                     $i++;
                 }
                 $i=0;
@@ -127,16 +117,18 @@ FORMREP4;
                 <h2>
                     TOTAL:$total €$
                     Pago realizado<br>
+            
+            <input type="submit" type="Submit" value="Volver al menú">
             </form>
-            <form action="catalogo.php" method="post">
-            
-            
-                </h2>
+            </h2>
 
 TAIL;
     $head=$head.$tail;
     print $head;
     
+    //limpiar el stack
+    $_SESSION['STACK'] = "";
+    $_SESSION['numProds'] = 0;
 ?>
 <html>
     <head>

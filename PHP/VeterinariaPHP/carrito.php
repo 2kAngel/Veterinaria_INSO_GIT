@@ -35,7 +35,7 @@ FORMPROD;
             foreach ($value as $value2){
                 foreach($value2 as $value3){
                     switch ($i) {
-                        case 1:
+                        case 1://Stack valor nombre
                             $nombre = $value3;
                             $formProd=<<<FORMREP
                                     <tr>
@@ -43,10 +43,10 @@ FORMPROD;
 FORMREP;
                             $formAux=$formAux.$formProd;
                             break;
-                        case 2:
+                        case 2://Stack valor stock del producto y busco en cantidad[num] la cantidad del producto
                             $stock=$value3;
-                            break;
-                        case 3:
+                            
+                        
                             /*if(empty($_POST["cantidad".$j])){//si viene de pedido
                                 if($_SESSION["cantidad".$j] > $stock){
                                      $_SESSION['cantidad'.$j]=$stock;
@@ -66,6 +66,9 @@ FORMREP2;
                             $formAux=$formAux.$formProd2;
                             $_SESSION['cantidad'.$j]=$cantidad;
                             //$cantidad=$value3;
+                            
+                            break;
+                        case 3://precio del producto
                             break;
                         default:
                             break;
