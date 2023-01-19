@@ -31,7 +31,7 @@
            
         include 'conexion_bd.php';
           
-        $query_conv = "SELECT dniVet, nombreVet FROM veterinario "; 
+        $query_conv = "SELECT dniVet, nombreVet FROM veterinario WHERE activo = '1'"; 
 
         $result_con = mysqli_query($conex, $query_conv) or die(mysqli_error($conex));
 
@@ -47,9 +47,9 @@
                 $nombreVet = $reg_con['nombreVet'];
 
                 if ($dniVet == $dniCliSel)  
-                    print ("<option value='$dniVet' selected> $nombreVet");
+                    print ("<option value='$dniVet' selected> $nombreVet - $dniVet");
                 else
-                    print ("<option value='$dniVet'> $nombreVet"); 
+                    print ("<option value='$dniVet'> $nombreVet - $dniVet"); 
             }
 
             print("</select>");

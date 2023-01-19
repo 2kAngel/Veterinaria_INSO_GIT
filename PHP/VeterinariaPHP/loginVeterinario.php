@@ -30,7 +30,7 @@ function validar(&$dni, &$contra, &$error){
         return false;
     }else{
         $query="SELECT nombreVet, passwordVet "
-                ."FROM veterinario WHERE dniVet = '$dni'";
+                ."FROM veterinario WHERE dniVet = '$dni' AND activo = '1'";
 		$res_valid=mysqli_query($conex,$query) 
                         or die (mysqli_error($conex));
                 
@@ -46,7 +46,7 @@ function validar(&$dni, &$contra, &$error){
     
     if($contra != $reg_cliente['passwordVet']){
         $contra2=$reg_cliente['passwordVet'];
-        $error="Error: Contraseña incorrecta, $contra2";
+        $error="Error: Contraseña incorrecta";
         $contra="";
         return false;
     }

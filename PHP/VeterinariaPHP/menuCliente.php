@@ -15,7 +15,7 @@
 
     print "<a href='eliminar_propio_cliente.php'>Eliminar su cuenta</a><br>"; 
 
-    print "<a href='catalogo.php'>Consultar Catalogo</a><br>";                  //FALTA
+    print "<a href='catalogo.php'>Comprar objetos del catalogo</a><br>";                  //FALTA
 
  
 ?>

@@ -24,7 +24,7 @@ FORMULARIO;
                 
 FORM11;
         
-        $querySelect="SELECT idTrata FROM tratamiento;";
+        $querySelect="SELECT idTrata FROM tratamiento WHERE activo = '1';";
         $res_tipo=mysqli_query($conex, $querySelect) or die (mysql_error());
         if (mysqli_num_rows($res_tipo)!=0){
             while ($reg=mysqli_fetch_array($res_tipo)){
@@ -53,7 +53,9 @@ FORM13;
     {
         include 'conexion_bd.php';
 
-        $queryUpdate="DELETE FROM `tratamiento` WHERE `tratamiento`.`idTrata` = '$idTrata'";
+        //$queryUpdate="DELETE FROM `tratamiento` WHERE `tratamiento`.`idTrata` = '$idTrata'";
+        
+        $queryUpdate = "UPDATE tratamiento SET activo = 0 WHERE `tratamiento`.`idTrata` = '$idTrata'";
                 
         if(!mysqli_query($conex,$queryUpdate)){
             $error= "valores introducidos no válidos";

@@ -10,7 +10,7 @@ session_start();
                    
         include 'conexion_bd.php';
         
-        $query_conv = "SELECT dniCli FROM cliente "; 
+        $query_conv = "SELECT dniCli, nombreCli FROM cliente "; 
 
         $result_con = mysqli_query($conex, $query_conv) or die(mysqli_error($conex));
 
@@ -23,11 +23,12 @@ session_start();
             while ($reg_con = mysqli_fetch_array($result_con))
             {
                 $dniCli = $reg_con['dniCli'];
+                $nombreCli = $reg_con['nombreCli'];
 
                 if ($dniCli == $dniCliSel)  
-                    print ("<option value='$dniCli' selected> $dniCli");
+                    print ("<option value='$dniCli' selected> $nombreCli");
                 else
-                    print ("<option value='$dniCli'> $dniCli"); 
+                    print ("<option value='$dniCli'> $nombreCli"); 
             }
 
             print("</select>");
@@ -72,12 +73,12 @@ session_start();
     if(empty($_POST))
     {                
         $dniCliSel = "";                        
-        $password = "";                      
+        $password = "";
     }
     else                                //En caso de si tener información en algun campo del formulario (Pintar Formulario)
     {
         $dniCliSel =  $_POST["clientes"];                        
-        $password = $_POST["password"];                      
+        $password = $_POST["password"];
     }
 
     if (empty($_POST)) //si aún no se ha enviado el formulario

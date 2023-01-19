@@ -29,8 +29,8 @@
     {
         include 'conexion_bd.php';
 
-        $queryUpdate="DELETE FROM cliente WHERE dniCli LIKE '$dniCli'";
-        
+        //$queryUpdate="DELETE FROM cliente WHERE dniCli LIKE '$dniCli'";
+        $queryUpdate="UPDATE cliente SET activo = 0 WHERE `cliente`.`dniCli` = '$dniCli';";
         $res_cli=mysqli_query($conex, $queryUpdate) or die (mysql_error($conex));
                 
         if(!$res_cli){

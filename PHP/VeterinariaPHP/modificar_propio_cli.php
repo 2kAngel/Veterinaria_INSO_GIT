@@ -42,10 +42,14 @@ FORMULARIO;
     }
     
     
-    function updateCliente($dniCli, $nombreCli, $apellidoCli,$passwordCli,$emailCli, $error)
+    function updateCliente($dniCli, $nombreCli, $apellidoCli,$passwordCli,$emailCli, &$error)
     {
         include 'conexion_bd.php';
 
+        if($nombreCli==""||$apellidoCli==""||$passwordCli==""||$emailCli==""){
+            $error.="<br>No debes dejar campos vacíos";
+            return false;
+        }
         $queryUpdate="UPDATE cliente SET "
                 . "dniCli = '$dniCli', nombreCli = '$nombreCli', apellidoCli = '$apellidoCli',"
                 . " passwordCli = '$passwordCli', emailCli = '$emailCli' "

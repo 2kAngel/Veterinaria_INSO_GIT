@@ -12,18 +12,18 @@ and open the template in the editor.
         $idTrata="";
         $tipoTrata="";
         $precioTrata="";
-        $fechaTrata="";
         $error="";
+        $aux = "";
     }else{
         $idTrata=$_POST["idTrata"];
         $tipoTrata=$_POST["tipoTrata"];
         $precioTrata=$_POST["precioTrata"];
-        $fechaTrata=$_POST["fechaTrata"];
+        $aux = $_POST["btnAux"];
     }
     $error = '';
 
     
-    function drawForm($idTrata, $tipoTrata, $precioTrata,$fechaTrata,$error){
+    function drawForm($idTrata, $tipoTrata, $precioTrata,$error){
         
     include 'conexion_bd.php';
         $form=<<<FORMULARIO
@@ -41,10 +41,17 @@ FORM11;
         $res_tipo=mysqli_query($conex, $querySelect) or die (mysql_error());
         if (mysqli_num_rows($res_tipo)!=0){
             while ($reg=mysqli_fetch_array($res_tipo)){
-                $idTrata=$reg['idTrata'];
-                $form11.=<<<FORM12
-                        <option  value="$idTrata">$idTrata</option>  
+                $idTrataF=$reg['idTrata'];
+                if(strcmp($idTrataF,$idTrata)){
+                    $form11.=<<<FORM12
+                        <option  value="$idTrataF">$idTrataF</option>  
 FORM12;
+                }else{
+                    $form11.=<<<FORM12
+                        <option  value="$idTrataF" selected>$idTrataF</option>  
+FORM12;
+                }
+                
             }
             
         } 
@@ -63,15 +70,14 @@ FORM13;
                 Precio Tratamiento
                 <input name="precioTrata" type="float" value="$precioTrata">
                 <br>
-                Fecha Tratamiento
-                <input name="fechaTrata" type="date" value="$fechaTrata">
-                <br>
                 
                 </h2>
                 <h3>$error </h3>
                 <br>
                 <br>
-                <input type="submit" name="Submit" value="Modificar">
+                <input type="submit" name="btnAux" value="Modificar">
+                <br>
+                <input type="submit" name="btnAux" value="Mostrar Datos">
     </form>
                 
 FORMULARIO;
@@ -83,10 +89,14 @@ FORMULARIO;
     }
     
     
-    function updateTratamiento($idTrata, $tipoTrata, $precioTrata,$fechaTrata,$error)
+    function updateTratamiento($idTrata, $tipoTrata, $precioTrata,$error)
     {
         include 'conexion_bd.php';
 
+        if($tipoTrata==""||$precioTrata==""){
+            $error="<br>No debes dejar campos vacíos";
+            return false;
+        }
         $queryUpdate="UPDATE `tratamiento` SET  `tipoTrata` = '$tipoTrata', "
                 . "`precioTrata` = '$precioTrata', `fechaTrata` = '$fechaTrata' "
                 . "WHERE `tratamiento`.`idTrata` = '$idTrata'; ";
@@ -98,6 +108,22 @@ FORMULARIO;
         return true;
     }
     
+    
+    function mostrar_datos($idTrata,$error){
+        include 'conexion_bd.php';
+
+        $querySelect="SELECT tipoTrata,precioTrata FROM tratamiento "
+                ."WHERE idTrata='$idTrata' AND activo = '1';";
+        
+        $res_tipo=mysqli_query($conex, $querySelect) or die (mysql_error());
+        if (mysqli_num_rows($res_tipo)!=0){
+            $reg=mysqli_fetch_array($res_tipo);
+            $tipoTrata=$reg['tipoTrata'];
+            $precioTrata=$reg['precioTrata'];
+            drawForm($idTrata, $tipoTrata, $precioTrata,$error);
+        }
+        
+    }
 ?>
 
 <html>
@@ -109,12 +135,17 @@ FORMULARIO;
         <?php
         
     if (empty($_POST))/*Rutina inicial*/{
-drawForm($idTrata, $tipoTrata, $precioTrata,$fechaTrata,$error);
+drawForm($idTrata, $tipoTrata, $precioTrata,$error);
     }else{/*Rutina segunda vuelta*/
-        if(updateTratamiento($idTrata, $tipoTrata, $precioTrata,$fechaTrata,$error)){
-            header("Location: menuVeterinario.php");
+        if(strcmp($aux,"Mostrar datos")){
+            if(updateTratamiento($idTrata, $tipoTrata, $precioTrata,$error)){
+                header("Location: menuVeterinario.php");
+            }
+            drawForm($idTrata, $tipoTrata, $precioTrata,$error);
+        }else{
+            mostrar_datos($idTrata,$error);
         }
-        drawForm($idTrata, $tipoTrata, $precioTrata,$fechaTrata,$error);
+        
     }
         ?>
     </body>

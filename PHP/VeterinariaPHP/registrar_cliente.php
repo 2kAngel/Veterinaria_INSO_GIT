@@ -25,7 +25,7 @@ and open the template in the editor.
         
     }
 
-    function drawForm(&$dniCli, &$nombreCli, &$apellidoCli,&$passwordCli,&$emailCli, &$error)
+    function drawForm(&$dniCli, &$nombreCli, &$apellidoCli,&$passwordCli, $repPassword,&$emailCli, &$error)
     {
         $form=<<<FORMULARIO
     <form action="registrar_cliente.php" method="post">
@@ -57,6 +57,9 @@ FORM1;
                 Contraseña
                 <input name="passwordCli" type="text" value="$passwordCli">
                 <br>
+                Repetir contraseña
+                <input name="repPassword" type="text" value="$repPassword">
+                <br>
                 Email
                 <input name="emailCli" type="email" value="$emailCli">
                 <br>
@@ -74,10 +77,14 @@ FORMULARIO;
         print $formFinal;
     }
     
-    function validar(&$dniCli, &$error)
+    function validar(&$dniCli, $passwordCli, $repPassword, &$error)
     {
         if(!$dniCli || !preg_match("/[0-9]{7,8}[A-Z]/",$dniCli)){
             $error="Error: Error de formato en DNI";
+            return false;
+        }
+        if($passwordCli != $repPassword){
+            $error="Error: Las contraseñas no coinciden";
             return false;
         }
         return true;
@@ -98,6 +105,7 @@ if (empty($_POST)){
         $nombreCli="";
         $apellidoCli="";
         $passwordCli="";
+        $repPassword="";
         $emailCli="";
         $error="";
     }else{
@@ -106,6 +114,7 @@ if (empty($_POST)){
         $apellidoCli=$_POST["apellidoCli"];
         $passwordCli=$_POST["passwordCli"];
         $emailCli=$_POST["emailCli"];
+        $repPassword=$_POST["repPassword"];
     }
     
     
@@ -113,16 +122,15 @@ if (empty($_POST)){
     
     if (empty($_POST))/*Rutina inicial*/
     {
-       drawForm($dniCli, $nombreCli, $apellidoCli,$passwordCli,$emailCli, $error);
+       drawForm($dniCli, $nombreCli, $apellidoCli,$passwordCli, $repPassword,$emailCli, $error);
        
     }else{/*Rutina segunda vuelta*/
-        if(validar($dniCli,$error)){
+        if(validar($dniCli,$passwordCli, $repPassword,$error)){
             if(mandarDatos($dniCli, $nombreCli, $apellidoCli,$passwordCli,$emailCli, $error)){
                 header("Location: menuVeterinario.php");
             }
-            
-        drawForm($dniCli, $nombreCli, $apellidoCli,$passwordCli,$emailCli, $error);
         }
+        drawForm($dniCli, $nombreCli, $apellidoCli,$passwordCli, $repPassword,$emailCli, $error);
     }
 ?>
     <style type="text/css">

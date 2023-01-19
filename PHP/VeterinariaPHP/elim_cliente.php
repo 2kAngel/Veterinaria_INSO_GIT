@@ -24,7 +24,7 @@ FORMULARIO;
                 
 FORM11;
         
-        $querySelect="SELECT dniCli FROM cliente;";
+        $querySelect="SELECT dniCli FROM cliente WHERE activo = '1';";
         $res_tipo=mysqli_query($conex, $querySelect) or die (mysql_error());
         if (mysqli_num_rows($res_tipo)!=0){
             while ($reg=mysqli_fetch_array($res_tipo)){
@@ -53,8 +53,10 @@ FORM13;
     {
         include 'conexion_bd.php';
 
-        $queryUpdate="DELETE FROM `cliente` WHERE `cliente`.`dniCli` = '$dniCli'";
-                
+        //$queryUpdate="DELETE FROM `cliente` WHERE `cliente`.`dniCli` = '$dniCli'";
+        
+        $queryUpdate = "UPDATE cliente SET activo = 0 WHERE `cliente`.`dniCli` = '$dniCli'";
+        
         if(!mysqli_query($conex,$queryUpdate)){
             $error= "valores introducidos no válidos";
             //mysqli_error($conex);/*Error en los datos de entrada*/

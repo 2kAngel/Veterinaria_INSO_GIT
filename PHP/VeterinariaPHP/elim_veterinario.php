@@ -24,7 +24,7 @@ FORMULARIO;
                 
 FORM11;
         
-        $querySelect="SELECT dniVet FROM veterinario;";
+        $querySelect="SELECT dniVet FROM veterinario WHERE activo = '1';";
         $res_tipo=mysqli_query($conex, $querySelect) or die (mysql_error());
         if (mysqli_num_rows($res_tipo)!=0){
             while ($reg=mysqli_fetch_array($res_tipo)){
@@ -53,7 +53,9 @@ FORM13;
     {
         include 'conexion_bd.php';
 
-        $queryUpdate="DELETE FROM `veterinario` WHERE `veterinario`.`dniVet` = '$dniVet'";
+        //$queryUpdate="DELETE FROM `veterinario` WHERE `veterinario`.`dniVet` = '$dniVet'";
+        
+        $queryUpdate = "UPDATE veterinario SET activo = 0 WHERE `veterinario`.`dniVet` = '$dniVet'";
                 
         if(!mysqli_query($conex,$queryUpdate)){
             $error= "valores introducidos no válidos";

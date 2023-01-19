@@ -10,19 +10,17 @@ session_start();
     function insertar_datos ($idMasc,$idTrata,$observacion){
         include 'conexion_bd.php';
 
-        $hoy=strval(date("d.m.y H:s"));   
-
+        $hoy=strval(date("d.m.y H:s")); 
+        
+        /*
         $id_factura = null; 
         
-        $query_factura="INSERT INTO factura (idFact,fechaFact) "
-        . "VALUES ('$id_factura','$hoy')";
+        $query_factura="INSERT INTO factura (idFact,fechaFact) VALUES ('$id_factura','$hoy')";
 
 
-        $res_valid=mysqli_query($conex,$query_factura) 
-                            or die (mysqli_error($conex));
+        $res_valid=mysqli_query($conex,$query_factura) or die (mysqli_error($conex));
 
-        $querySelect="SELECT idFact FROM factura "
-                . "WHERE fechaFact = '$hoy'";
+        $querySelect="SELECT idFact FROM factura WHERE fechaFact = '$hoy'";
 
         
         $res_factura2=mysqli_query($conex, $querySelect) or die (mysqli_error($conex));
@@ -30,13 +28,14 @@ session_start();
                 $reg=mysqli_fetch_array($res_factura2);
                 $idFact=$reg['idFact'];
         }
+        */
         
-        $query_trata_masc="INSERT INTO trata_masc (idMasc, idTrata, idFact, observacion) "
-            . "VALUES ('$idMasc','$idTrata','$idFact','$observacion')";
+        $query_trata_masc="INSERT INTO trata_masc (idTratMasc, idMasc, idTrata, observacion, fecha) "
+            . "VALUES (NULL,'$idMasc','$idTrata','$observacion', '$hoy')";
         
         $res_valid=mysqli_query($conex,$query_trata_masc) 
                         or die (mysqli_error($conex));
-    
+        $idFact = mysqli_insert_id($conex);
         imprimirFactura($idMasc,$idTrata,$observacion, $idFact, $hoy);
     }
     

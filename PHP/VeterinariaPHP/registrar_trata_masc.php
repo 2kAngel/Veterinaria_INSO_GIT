@@ -11,7 +11,7 @@ session_start();
         
         print  "<form action='registrar_trata_masc.php' method='post'>";
           
-        $query_conv = "SELECT idMasc FROM mascota "; 
+        $query_conv = "SELECT idMasc,tipoAnimal,dniCli FROM mascota WHERE activo = '1'"; 
 
         $result_con = mysqli_query($conex, $query_conv) or die(mysqli_error($conex));
 
@@ -24,11 +24,12 @@ session_start();
             while ($reg_con = mysqli_fetch_array($result_con))
             {
                 $idMascota = $reg_con['idMasc'];
-            
+                $tipoAnimal= $reg_con['tipoAnimal'];
+                $dniCli=$reg_con['dniCli'];
                 if ($idMascota == $idMascotaSel)  
-                    print ("<option value='$idMascota' selected> $idMascota");
+                    print ("<option value='$idMascota' selected> $idMascota/$tipoAnimal/D:$dniCli");
                 else
-                    print ("<option value='$idMascota'> $idMascota"); 
+                    print ("<option value='$idMascota'> $idMascota/$tipoAnimal/D:$dniCli"); 
             }
 
             print("</select>");
@@ -38,7 +39,7 @@ session_start();
             print ("<p>No hay ningun mascota</p>");
         }
         
-        $query_conv = "SELECT idTrata FROM tratamiento "; 
+        $query_conv = "SELECT idTrata,tipoTrata FROM tratamiento WHERE activo = '1'"; 
 
         $result_con = mysqli_query($conex, $query_conv) or die(mysqli_error($conex));
 
@@ -51,11 +52,11 @@ session_start();
             while ($reg_con = mysqli_fetch_array($result_con))
             {
                 $trata = $reg_con['idTrata'];
-            
+                $tipoTrata = $reg_con['tipoTrata'];
                 if ($trata == $trataSel)  
-                    print ("<option value='$trata' selected> $trata");
+                    print ("<option value='$trata' selected> $trata/$tipoTrata");
                 else
-                    print ("<option value='$trata'> $trata"); 
+                    print ("<option value='$trata'> $trata/$tipoTrata"); 
             }
 
             print("</select>");

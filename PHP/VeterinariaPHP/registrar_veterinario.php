@@ -8,7 +8,7 @@ and open the template in the editor.
     
 
     
-    function mandarDatos($dniVet, $nombreVet, $numVet, $passwordVet, $emailVet)
+    function mandarDatos($dniVet, $nombreVet, $numVet, $passwordVet, $emailVet, $error)
     {
         include 'conexion_bd.php';
 
@@ -22,7 +22,7 @@ and open the template in the editor.
           
     }
 
-    function drawForm($dniVet, $nombreVet, $numVet, $passwordVet, $emailVet)
+    function drawForm($dniVet, $nombreVet, $numVet, $passwordVet, $repPassword, $emailVet, &$error)
     {
         $form=<<<FORMULARIO
     <form action="registrar_veterinario.php" method="post">
@@ -54,10 +54,14 @@ FORM1;
                 Contraseña
                 <input name="passwordVet" type="password" value="$passwordVet">
                 <br>
+                Repetir contraseña
+                <input name="repPassword" type="password" value="$repPassword">
+                <br>
                 Email
                 <input name="emailVet" type="email" value="$emailVet">
                 <br>
                 </h2>
+                <h3>$error </h3>
                 <br>
                 <br>
                 <input type="submit" name="Submit" value="Añadir">
@@ -70,12 +74,18 @@ FORMULARIO;
         print $formFinal;
     }
     
-    function validar(&$dniVet, &$error)
+    function validar(&$dniVet, $passwordVet, $repPassword, &$error)
     {
         if(!$dniVet || !preg_match("/[0-9]{7,8}[A-Z]/",$dniVet)){
             $error="Error: Error de formato en DNI";
             return false;
         }
+        
+        if($passwordVet != $repPassword){
+            $error="Error: Las contraseñas no coinciden";
+            return false;
+        }
+        
         return true;
     }
     
@@ -99,12 +109,14 @@ if (empty($_POST)){
         $numVet="";
         $passwordVet="";
         $emailVet="";
+        $repPassword="";
         $error="";
     }else{
         $dniVet = $_POST["dniVet"];
         $nombreVet=$_POST["nombreVet"];
         $numVet=$_POST["numVet"];
         $passwordVet=$_POST["passwordVet"];
+        $repPassword=$_POST["repPassword"];
         $emailVet=$_POST["emailVet"];
     }
     
@@ -112,16 +124,15 @@ if (empty($_POST)){
     
     if (empty($_POST))/*Rutina inicial*/
     {
-       drawForm($dniVet, $nombreVet, $numVet,$passwordVet, $emailVet);
+       drawForm($dniVet, $nombreVet, $numVet,$passwordVet, $repPassword, $emailVet, $error);
        
     }else{/*Rutina segunda vuelta*/
-        if(validar($dniVet,$error)){
-            if(mandarDatos($dniVet, $nombreVet, $numVet, $passwordVet, $emailVet)){
+        if(validar($dniVet, $passwordVet, $repPassword,$error)){
+            if(mandarDatos($dniVet, $nombreVet, $numVet, $passwordVet, $emailVet, $error)){
                 header("Location: menuVeterinario.php");
             }
-            
-        drawForm($dniVet, $nombreVet, $numVet,$passwordVet, $emailVet);
-        }
+        } 
+        drawForm($dniVet, $nombreVet, $numVet,$passwordVet, $repPassword, $emailVet, $error);
     }
 ?>
     <style type="text/css">

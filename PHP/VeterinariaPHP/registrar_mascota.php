@@ -29,7 +29,7 @@ and open the template in the editor.
          print  "<form action='registrar_mascota.php' method='post'>";
         include 'conexion_bd.php';
         
-        $query_conv = "SELECT dniCli FROM cliente "; 
+        $query_conv = "SELECT dniCli FROM cliente WHERE activo = '1'"; 
 
         $result_con = mysqli_query($conex, $query_conv) or die(mysqli_error($conex));
 
@@ -52,7 +52,7 @@ and open the template in the editor.
             print("</select>");
         }   
             
-        $query_conv = "SELECT dniVet, nombreVet FROM veterinario "; 
+        $query_conv = "SELECT dniVet, nombreVet FROM veterinario WHERE activo = '1'"; 
 
         $result_con = mysqli_query($conex, $query_conv) or die(mysqli_error($conex));
 

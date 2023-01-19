@@ -22,7 +22,7 @@ function draw_catalogo($dni, $nombre){
 FORM;
     
     $query_tipo="SELECT tipoPro, precio
-			FROM tipo;";
+			FROM tipo WHERE activo ='1';";
     
     $res_tipo=mysqli_query($conex, $query_tipo) or die (mysql_error());
     
@@ -80,7 +80,7 @@ function draw_catalogo_prod($tipoPro, $stack, $nombre, $numProdsAnterior){
     
     $query_producto="SELECT idProducto, nombrePro, stock 
 			FROM producto
-			WHERE tipoProducto like '$tipoPro'; ";
+			WHERE tipoProducto like '$tipoPro' AND activo = '1'; ";
     
     $res_tipo=mysqli_query($conex, $query_producto) or die (mysql_error());
 
@@ -157,7 +157,7 @@ function getPrecio($tipoPro){
     include 'conexion_bd.php';
     $query_precio="SELECT precio 
 			FROM tipo
-			WHERE tipoPro = '$tipoPro'; ";
+			WHERE tipoPro = '$tipoPro' AND activo = '1'; ";
     
     $res_precio=mysqli_query($conex, $query_precio) or die (mysql_error());
         if (mysqli_num_rows($res_precio)!=0){

@@ -14,17 +14,19 @@ formulario con datos clientes
         $passwordCli="";
         $emailCli="";
         $error="";
+        $aux="";
     }else{
         $dniCli=$_POST["dniCli"];
         $nombreCli=$_POST["nombreCli"];
         $apellidoCli=$_POST["apellidoCli"];
         $passwordCli=$_POST["passwordCli"];
         $emailCli=$_POST["emailCli"];
+        $aux = $_POST["btnAux"];
     }
     $error = '';
 
     
-    function drawForm(&$nombreCli, &$apellidoCli,&$passwordCli,&$emailCli, &$error){
+    function drawForm($dniCliF,$nombreCliF, $apellidoCliF,$passwordCliF,$emailCliF,&$error){
         
     include 'conexion_bd.php';
         $form=<<<FORMULARIO
@@ -38,14 +40,21 @@ FORMULARIO;
                 
 FORM11;
         
-        $querySelect="SELECT dniCli FROM cliente;";
+        $querySelect="SELECT dniCli FROM cliente where activo='1';";
         $res_tipo=mysqli_query($conex, $querySelect) or die (mysql_error());
         if (mysqli_num_rows($res_tipo)!=0){
             while ($reg=mysqli_fetch_array($res_tipo)){
                 $dniCli=$reg['dniCli'];
-                $form11.=<<<FORM12
+                if(strcmp($dniCli,$dniCliF)){
+                    $form11.=<<<FORM12
                         <option  value="$dniCli">$dniCli</option>  
 FORM12;
+                }else{
+                    $form11.=<<<FORM12
+                        <option  value="$dniCli" selected>$dniCli</option>  
+FORM12;
+                }
+                
             }
             
         } 
@@ -56,22 +65,24 @@ FORM13;
         $form1=$form11.$form13;
         $form2=<<<FORMULARIO
                 Nombre
-                <input name="nombreCli" type="text" value="$nombreCli">
+                <input name="nombreCli" type="text" value="$nombreCliF">
                 <br>
                 Apellidos
-                <input name="apellidoCli" type="text" value="$apellidoCli">
+                <input name="apellidoCli" type="text" value="$apellidoCliF">
                 <br>
                 Contraseña
-                <input name="passwordCli" type="text" value="$passwordCli">
+                <input name="passwordCli" type="text" value="$passwordCliF">
                 <br>
                 Email
-                <input name="emailCli" type="email" value="$emailCli">
+                <input name="emailCli" type="email" value="$emailCliF">
                 <br>
                 </h2>
                 <h3>$error </h3>
                 <br>
                 <br>
-                <input type="submit" name="Submit" value="Modificar">
+                <input type="submit" name="btnAux" value="Mostrar datos">
+                <br>
+                <input type="submit" name="btnAux" value="Modificar">
     </form>
                 
 FORMULARIO;
@@ -82,10 +93,14 @@ FORMULARIO;
     }
     
     
-    function updateCliente(&$dniCli, &$nombreCli, &$apellidoCli,&$passwordCli,&$emailCli, &$error)
+    function updateCliente($dniCli, $nombreCli, $apellidoCli,$passwordCli,$emailCli, &$error)
     {
         include 'conexion_bd.php';
-
+        
+        if($nombreCli=="" || $apellidoCli="" || $passwordCli="" || $emailCli=""){
+            $error.="<br>No puedes dejar campos vacíos";
+            return false;
+        }
         $queryUpdate="UPDATE `cliente` SET "
                 . "`dniCli` = '$dniCli', `nombreCli` = '$nombreCli', `apellidoCli` = '$apellidoCli',"
                 . " `passwordCli` = '$passwordCli', `emailCli` = '$emailCli' "
@@ -100,6 +115,23 @@ FORMULARIO;
         
     }
     
+    function mostrar_datos($dniCli,$aux,$error){
+                include 'conexion_bd.php';
+                
+                $querySelect="SELECT nombreCli,apellidoCli,passwordCli,emailCli FROM cliente "
+                        . "WHERE activo='1' AND dniCli='$dniCli';";
+                
+                $res_tipo=mysqli_query($conex, $querySelect) or die (mysql_error());
+                
+                if (mysqli_num_rows($res_tipo)!=0){
+                    $reg=mysqli_fetch_array($res_tipo);
+                    $nombreCli=$reg['nombreCli'];
+                    $apellidoCli=$reg['apellidoCli'];
+                    $emailCli=$reg['emailCli'];
+                    $passwordCli = $reg['passwordCli'];
+                    drawForm($dniCli,$nombreCli,$apellidoCli,$passwordCli,$emailCli,$error);
+                }
+    }
 ?>
 <html>
     <head>
@@ -110,12 +142,16 @@ FORMULARIO;
         <?php
         
     if (empty($_POST))/*Rutina inicial*/{
-        drawForm($nombreCli, $apellidoCli, $passwordCli, $emailCli, $error);
+        drawForm($dniCli,$nombreCli, $apellidoCli, $passwordCli, $emailCli, $error);
     }else{/*Rutina segunda vuelta*/
-        if(updateCliente($dniCli,$nombreCli, $apellidoCli,$passwordCli,$emailCli,$error)){
+        if(strcmp($aux,"Mostrar datos")){
+            if(updateCliente($dniCli,$nombreCli, $apellidoCli,$passwordCli,$emailCli,$error)){
             header("Location: menuVeterinario.php");
+            }
+            drawForm($dniCli,$nombreCli, $apellidoCli, $passwordCli, $emailCli ,$error);
+        }else{
+            mostrar_datos($dniCli,$aux,$error);
         }
-        drawForm($nombreCli, $apellidoCli, $passwordCli, $emailCli, $error);
     }
         ?>
     </body>

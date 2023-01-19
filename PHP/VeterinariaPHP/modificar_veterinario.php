@@ -23,17 +23,19 @@ formulario con datos clientes
         $passwordVet="";
         $emailVet="";
         $error="";
+        $aux = "";
     }else{
         $dniVet=$_POST["dniVet"];
         $nombreVet=$_POST["nombreVet"];
         $numVet=$_POST["numVet"];
         $passwordVet=$_POST["passwordVet"];
         $emailVet=$_POST["emailVet"];
+        $aux = $_POST["btnAux"];
     }
     $error = '';
 
     
-    function drawForm(&$nombreVet, &$numVet,&$passwordVet,&$emailVet, &$error){
+    function drawForm($dniVet,$nombreVet, $numVet,$passwordVet,$emailVet, &$error){
         
     include 'conexion_bd.php';
         $form=<<<FORMULARIO
@@ -46,14 +48,20 @@ FORMULARIO;
                 <select name="dniVet">
 FORM11;
         
-        $querySelect="SELECT dniVet FROM veterinario;";
+        $querySelect="SELECT dniVet FROM veterinario WHERE activo='1';";
         $res_tipo=mysqli_query($conex, $querySelect) or die (mysql_error());
         if (mysqli_num_rows($res_tipo)!=0){
             while ($reg=mysqli_fetch_array($res_tipo)){
-                $dniVet=$reg['dniVet'];
-                $form11.=<<<FORM12
-                        <option  value="$dniVet">$dniVet</option>  
+                $dniVetF=$reg['dniVet'];
+                if(strcmp($dniVet,$dniVetF)){
+                    $form11.=<<<FORM12
+                        <option  value="$dniVetF">$dniVetF</option>  
 FORM12;
+                }else{
+                    $form11.=<<<FORM12
+                        <option  value="$dniVetF" selected>$dniVetF</option>  
+FORM12;
+                }
             }
             
         } 
@@ -79,7 +87,10 @@ FORM13;
                 <h3>$error </h3>
                 <br>
                 <br>
-                <input type="submit" name="Submit" value="Modificar">
+                <input type="submit" name="btnAux" value="Modificar">
+                <br>
+                <input type="submit" name="btnAux" value="Mostrar datos">
+
     </form>
                 
 FORMULARIO;
@@ -94,6 +105,10 @@ FORMULARIO;
     {
         include 'conexion_bd.php';
 
+        if($nombreVet=""||$numVet==""||$passwordVet=""||$emailVet==""){
+            $error.="<br>No debes dejar campos vacíos";
+            return false;
+        }
         $queryUpdate="UPDATE `veterinario` SET "
                 . "`dniVet` = '$dniVet', `nombreVet` = '$nombreVet', `numVet` = '$numVet',"
                 . " `passwordVet` = '$passwordVet', `emailVet` = '$emailVet' "
@@ -104,6 +119,26 @@ FORMULARIO;
             return false;
         }
         return true;
+    }
+    
+    
+    function mostrarDatos($dniVet,$error,$aux){
+        
+        include 'conexion_bd.php';
+
+        
+        $querySelect="SELECT nombreVet,numVet,passwordVet,emailVet FROM veterinario "
+                . "WHERE dniVet='$dniVet' AND activo = '1';";
+        
+        $res_tipo=mysqli_query($conex, $querySelect) or die (mysql_error());
+        if (mysqli_num_rows($res_tipo)!=0){
+            $reg=mysqli_fetch_array($res_tipo);
+            $nombreVet=$reg['nombreVet'];
+            $numVet=$reg['numVet'];
+            $passwordVet=$reg['passwordVet'];
+            $emailVet = $reg['emailVet'];
+            drawForm($dniVet,$nombreVet, $numVet,$passwordVet,$emailVet,$error);
+        }
     }
     
 ?>
@@ -117,12 +152,17 @@ FORMULARIO;
         <?php
         
     if (empty($_POST))/*Rutina inicial*/{
-        drawForm($nombreVet, $numVet, $passwordVet, $emailVet, $error);
+        drawForm($dniVet,$nombreVet, $numVet, $passwordVet, $emailVet, $error);
     }else{/*Rutina segunda vuelta*/
-        if(updateVeterinario($dniVet,$nombreVet, $numVet,$passwordVet,$emailVet,$error)){
-            header("Location: menuVeterinario.php");
+        if(strcmp($aux,"Mostrar datos")){
+            if(updateVeterinario($dniVet,$nombreVet, $numVet,$passwordVet,$emailVet,$error)){
+                header("Location: menuVeterinario.php");
+            }
+            drawForm($dniVet,$nombreVet, $nomVet, $passwordVet, $emailVet, $error);
+        }else{
+            mostrarDatos($dniVet,$error,$aux);
         }
-        drawForm($nombreVet, $nomVet, $passwordVet, $emailVet, $error);
+        
     }
         ?>
     </body>
