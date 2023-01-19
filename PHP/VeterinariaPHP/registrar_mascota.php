@@ -29,7 +29,7 @@ and open the template in the editor.
          print  "<form action='registrar_mascota.php' method='post'>";
         include 'conexion_bd.php';
         
-        $query_conv = "SELECT dniCli FROM cliente WHERE activo = '1'"; 
+        $query_conv = "SELECT dniCli, nombreCli FROM cliente WHERE activo = '1'"; 
 
         $result_con = mysqli_query($conex, $query_conv) or die(mysqli_error($conex));
 
@@ -42,11 +42,12 @@ and open the template in the editor.
             while ($reg_con = mysqli_fetch_array($result_con))
             {
                 $dniCli = $reg_con['dniCli'];
+                $nombreCli = $reg_con['nombreCli'];
 
                 if ($dniCli == $dniCliSel)  
-                    print ("<option value='$dniCli' selected> $dniCli");
+                    print ("<option value='$dniCli' selected> $dniCli - $nombreCli");
                 else
-                    print ("<option value='$dniCli'> $dniCli"); 
+                    print ("<option value='$dniCli'> $dniCli - $nombreCli"); 
             }
             
             print("</select>");
@@ -81,10 +82,8 @@ and open the template in the editor.
         }
         
         print "<p> <input type='radio' name = 'sexo' value='H'";
-        if ($sexo == 'H') 
+        
             print "checked> Hembra </p>";
-        else
-            print "> Hembra </p>";
 
         print "<p> <input type='radio' name = 'sexo' value='M'";
 

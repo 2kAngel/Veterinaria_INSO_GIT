@@ -11,10 +11,14 @@ and open the template in the editor.
     session_start();
     include 'conexion_bd.php';
     
-    function mandarDatos($tipoPro, $precio)
+    function mandarDatos($tipoPro, $precio,&$error)
     {
         include 'conexion_bd.php';
-
+        if($precio <0)
+        {
+            $error.="<br>El precio no puede ser negativo";
+            return false;
+        }
         $queryInsert="INSERT INTO tipo (tipoPro, precio) 
                       VALUES ('$tipoPro','$precio');";
         
@@ -26,7 +30,7 @@ and open the template in the editor.
         return true; 
     }
     
-    function drawForm($tipoPro, $precio)
+    function drawForm($tipoPro, $precio, $error)
 {
 $form=<<<FORMULARIO
             <form action="registrar_tipo.php" method="post">
@@ -53,6 +57,9 @@ $form2=<<<FORMULARIO
                 <input name="precio" type="number" value="$precio">
                 <br>
                 </h2>
+                <br>
+                $error
+                <br>
               
                 <input type="submit" name="Submit" value="Añadir">
                 </form>
@@ -63,10 +70,14 @@ FORMULARIO;
         print $formFinal;
     }
     
-    function validar(&$tipoPro,&$error)
+    function validar(&$tipoPro, $precio, &$error)
     {
         if(!$tipoPro){
-            $error="Error: El tipo de producto debe introducirse";
+            $error.="Error: El tipo de producto debe introducirse";
+            return false;
+        }
+        if($precio <= 0){
+            $error.="Error: El precio no puede ser 0 o negativo, puesto que no hay ganancia";
             return false;
         }
         return true;
@@ -97,13 +108,12 @@ if (empty($_POST)){
     {
        drawForm($tipoPro, $precio, $error);
     }else{/*Rutina segunda vuelta*/
-        if(validar($tipoPro,$error)){
-            if(mandarDatos($tipoPro, $precio)){
+        if(validar($tipoPro, $precio,$error)){
+            if(mandarDatos($tipoPro, $precio,$error)){
                 header("Location: menuVeterinario.php");
             }
-            
-        drawForm($tipoPro, $precio, $error);
         }
+        drawForm($tipoPro, $precio, $error);
     }
 ?>
         

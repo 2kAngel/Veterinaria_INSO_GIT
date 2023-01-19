@@ -8,9 +8,14 @@ and open the template in the editor.
     
 
     
-    function mandarDatos($dniVet, $nombreVet, $numVet, $passwordVet, $emailVet, $error)
+    function mandarDatos($dniVet, $nombreVet, $numVet, $passwordVet, $emailVet, &$error)
     {
         include 'conexion_bd.php';
+        
+        if($dniVet==""||$nombreVet==""||$numVet==""||$passwordVet==""||$emailVet==""){
+            $error="No pueden quedar campos vacíos";
+            return false;
+        }
 
         $queryInsert="INSERT INTO veterinario (dniVet, nombreVet, numVet, passwordVet, emailVet) 
                      VALUES ('$dniVet', '$nombreVet', '$numVet', '$passwordVet', '$emailVet');";

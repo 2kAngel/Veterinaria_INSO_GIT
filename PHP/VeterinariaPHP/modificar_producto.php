@@ -18,7 +18,7 @@ and open the template in the editor.
  
         include 'conexion_bd.php';
           
-        $querySelect="SELECT idProducto FROM producto;";
+        $querySelect="SELECT idProducto FROM producto WHERE activo = '1'";
         $res_tipo=mysqli_query($conex, $querySelect) or die (mysql_error());
 
         print("<h2>idProducto: </h2>");
@@ -171,7 +171,7 @@ FORMULARIO;
             drawForm($idProducto,$tipoProducto,$nombrePro,$stock,$error);
         }else{/*Rutina segunda vuelta*/
             if(updateProducto($idProducto,$tipoProducto,$nombrePro,$stock,$error)){
-                //header("Location: menuVeterinario.php");
+                header("Location: menuVeterinario.php");
             }
             drawForm($idProducto,$tipoProducto,$nombrePro,$stock,$error);
         }

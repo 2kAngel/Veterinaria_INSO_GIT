@@ -99,7 +99,7 @@ FORMULARIO;
             $valida = false;
         }
         
-        if($stock <= 0){
+        if($stock < 0){
             $error=$error. " El stock de producto debe ser mayor que 1";
             $valida = false;
         }

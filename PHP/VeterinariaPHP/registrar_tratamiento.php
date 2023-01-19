@@ -9,24 +9,24 @@ and open the template in the editor.
     session_start();
     include 'conexion_bd.php';
     
-    function mandarDatos($tipoTrata, $precioTrata, $fechaTrata)
+    function mandarDatos($tipoTrata, $precioTrata, &$error)
     {
         include 'conexion_bd.php';
 
         $idTrata = null;
         
-         $queryInsert="INSERT INTO tratamiento (idTrata, tipoTrata, precioTrata, fechaTrata) 
-                      VALUES ('$idTrata', '$tipoTrata', '$precioTrata', '$fechaTrata' );";
+        $queryInsert="INSERT INTO tratamiento (idTrata, tipoTrata, precioTrata) 
+                      VALUES ('$idTrata', '$tipoTrata', '$precioTrata' );";
          
         if(!mysqli_query($conex, $queryInsert)){
-
+            $error ="Datos introducidos no válidos";
             return false;
         }
         return true;
           
     }
     
-    function drawForm($tipoTrata, $precioTrata, $fechaTrata)
+    function drawForm($tipoTrata, $precioTrata,$error)
     {
         print  "<form action='registrar_tratamiento.php' method='post'>";
         
@@ -39,9 +39,8 @@ and open the template in the editor.
                 Precio tratamiento
                 <input name="precioTrata" type="float" value="$precioTrata">
                 <br>
-                Fecha tratamiento
-                <input name="fechaTrata" type="date" value="$fechaTrata">
                 <br>
+                $error
                 </h2>
                 <br>
                 <br>
@@ -58,7 +57,7 @@ FORMULARIO;
                
     }
     
-    function validar( &$tipoTrata, &$precioTrata, &$fechaTrata, &$error)
+    function validar( &$tipoTrata, &$precioTrata, &$error)
     {
         $valido = true;
         
@@ -81,13 +80,6 @@ FORMULARIO;
             $valido = false;
             $precioTrata = "";
         }
-        
-        if ($fechaTrata == null){
-            $error = $error."Fecha de creacion vacia";
-            $valido = false;
-            $fechaTrata = null;
-          }
-    
         return $valido;
     }
     
@@ -108,28 +100,27 @@ FORMULARIO;
     if (empty($_POST)){
         $tipoTrata="";
         $precioTrata= 0;
-        $fechaTrata= null;
         $error = "";
     }else{
         $tipoTrata =  $_POST["tipoTrata"];
         $precioTrata =  $_POST["precioTrata"];
-        $fechaTrata =  $_POST["fechaTrata"];
+        
     }
     
     $error = '';
     
     if (empty($_POST))/*Rutina inicial*/
     {
-       drawForm( $tipoTrata, $precioTrata, $fechaTrata);
+       drawForm( $tipoTrata, $precioTrata, $error);
     }else{/*Rutina segunda vuelta*/
-        if(validar( $tipoTrata, $precioTrata, $fechaTrata, $error)){
-            if(mandarDatos( $tipoTrata, $precioTrata, $fechaTrata)){           
+        if(validar( $tipoTrata, $precioTrata, $error)){
+            if(mandarDatos( $tipoTrata, $precioTrata, $error)){           
                 header("Location: menuVeterinario.php");
             }
         }
         else{
             print $error;    
-            drawForm( $tipoTrata, $precioTrata, $fechaTrata);
+            drawForm( $tipoTrata, $precioTrata, $error);
         }
     }
 ?>

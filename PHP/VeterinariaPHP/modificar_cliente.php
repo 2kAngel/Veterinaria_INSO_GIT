@@ -97,7 +97,7 @@ FORMULARIO;
     {
         include 'conexion_bd.php';
         
-        if($nombreCli=="" || $apellidoCli="" || $passwordCli="" || $emailCli=""){
+        if($nombreCli=="" || $apellidoCli=="" || $passwordCli=="" || $emailCli==""){
             $error.="<br>No puedes dejar campos vacíos";
             return false;
         }

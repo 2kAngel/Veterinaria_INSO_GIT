@@ -60,10 +60,9 @@
         }
         
         print "<p> <input type='radio' name = 'sexo' value='H'";
-        if ($sexo == 'H') 
+        
             print "checked> Hembra </p>";
-        else
-            print "> Hembra </p>";
+        
 
         print "<p> <input type='radio' name = 'sexo' value='M'";
 

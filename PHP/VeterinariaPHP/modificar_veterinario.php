@@ -105,8 +105,11 @@ FORMULARIO;
     {
         include 'conexion_bd.php';
 
-        if($nombreVet=""||$numVet==""||$passwordVet=""||$emailVet==""){
+        if($nombreVet==""||$numVet==""||$passwordVet==""||$emailVet==""){
             $error.="<br>No debes dejar campos vacíos";
+            return false;
+        }if (!preg_match ("/^[0-9]{9}/", $numVet)) {
+            $error.="<br>El numero debe contener solo 9 numeros";
             return false;
         }
         $queryUpdate="UPDATE `veterinario` SET "
@@ -158,7 +161,7 @@ FORMULARIO;
             if(updateVeterinario($dniVet,$nombreVet, $numVet,$passwordVet,$emailVet,$error)){
                 header("Location: menuVeterinario.php");
             }
-            drawForm($dniVet,$nombreVet, $nomVet, $passwordVet, $emailVet, $error);
+            drawForm($dniVet,$nombreVet, $numVet, $passwordVet, $emailVet, $error);
         }else{
             mostrarDatos($dniVet,$error,$aux);
         }

@@ -13,13 +13,20 @@ and open the template in the editor.
     {
         include 'conexion_bd.php';
 
-        $queryInsert="INSERT INTO cliente (dniCli, nombreCli, apellidoCli, passwordCli, emailCli) "
-            ."VALUES ('$dniCli','$nombreCli','$apellidoCli','$passwordCli','$emailCli');";
-        if(!mysqli_query($conex,$queryInsert)){
-            $error= "valores introducidos no válidos";
-            //mysqli_error($conex);/*Error en los datos de entrada*/
+        if($dniCli==""||$nombreCli==""||$apellidoCli==""||$passwordCli==""||$emailCli==""){
+            $error="<br>Los campos no pueden estar vacíos";
             return false;
+        }else{
+            $queryInsert="INSERT INTO cliente (dniCli, nombreCli, apellidoCli, passwordCli, emailCli) "
+            ."VALUES ('$dniCli','$nombreCli','$apellidoCli','$passwordCli','$emailCli');";
+            if(!mysqli_query($conex,$queryInsert)){
+                $error= "valores introducidos no válidos";
+                //mysqli_error($conex);/*Error en los datos de entrada*/
+                return false;
+            }
+            
         }
+        
         return true;
         
         
@@ -55,10 +62,10 @@ FORM1;
                 <input name="apellidoCli" type="text" value="$apellidoCli">
                 <br>
                 Contraseña
-                <input name="passwordCli" type="text" value="$passwordCli">
+                <input name="passwordCli" type="password" value="$passwordCli">
                 <br>
                 Repetir contraseña
-                <input name="repPassword" type="text" value="$repPassword">
+                <input name="repPassword" type="password" value="$repPassword">
                 <br>
                 Email
                 <input name="emailCli" type="email" value="$emailCli">
@@ -87,6 +94,7 @@ FORMULARIO;
             $error="Error: Las contraseñas no coinciden";
             return false;
         }
+        
         return true;
     }
     

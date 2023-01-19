@@ -149,6 +149,8 @@ TABLA_COMPLETA2;
     
     print $tabla_completa2;
         
+    }else{
+        print "<br>No hay productos de este tipo";
     }
 }
 

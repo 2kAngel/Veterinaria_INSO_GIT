@@ -23,7 +23,7 @@ and open the template in the editor.
     $error = '';
 
     
-    function drawForm($idTrata, $tipoTrata, $precioTrata,$error){
+    function drawForm($idTrata, $tipoTrata, $precioTrata, $error){
         
     include 'conexion_bd.php';
         $form=<<<FORMULARIO
@@ -37,7 +37,7 @@ FORMULARIO;
                 idTrata
                 <select name="idTrata">
 FORM11;
-        $querySelect="SELECT idTrata FROM tratamiento;";
+        $querySelect="SELECT idTrata FROM tratamiento WHERE activo='1';";
         $res_tipo=mysqli_query($conex, $querySelect) or die (mysql_error());
         if (mysqli_num_rows($res_tipo)!=0){
             while ($reg=mysqli_fetch_array($res_tipo)){
@@ -98,7 +98,7 @@ FORMULARIO;
             return false;
         }
         $queryUpdate="UPDATE `tratamiento` SET  `tipoTrata` = '$tipoTrata', "
-                . "`precioTrata` = '$precioTrata', `fechaTrata` = '$fechaTrata' "
+                . "`precioTrata` = '$precioTrata' "
                 . "WHERE `tratamiento`.`idTrata` = '$idTrata'; ";
         if(!mysqli_query($conex,$queryUpdate)){
             $error= "valores introducidos no válidos";
@@ -109,11 +109,11 @@ FORMULARIO;
     }
     
     
-    function mostrar_datos($idTrata,$error){
+    function mostrar_datos($idTrata,&$error, $aux){
         include 'conexion_bd.php';
 
-        $querySelect="SELECT tipoTrata,precioTrata FROM tratamiento "
-                ."WHERE idTrata='$idTrata' AND activo = '1';";
+        $querySelect="SELECT tipoTrata, precioTrata FROM tratamiento "
+                ."WHERE idTrata='$idTrata' AND activo='1';";
         
         $res_tipo=mysqli_query($conex, $querySelect) or die (mysql_error());
         if (mysqli_num_rows($res_tipo)!=0){
@@ -135,15 +135,15 @@ FORMULARIO;
         <?php
         
     if (empty($_POST))/*Rutina inicial*/{
-drawForm($idTrata, $tipoTrata, $precioTrata,$error);
+        drawForm($idTrata, $tipoTrata, $precioTrata,$error);
     }else{/*Rutina segunda vuelta*/
-        if(strcmp($aux,"Mostrar datos")){
+        if(strcmp($aux,"Mostrar Datos")){
             if(updateTratamiento($idTrata, $tipoTrata, $precioTrata,$error)){
                 header("Location: menuVeterinario.php");
             }
             drawForm($idTrata, $tipoTrata, $precioTrata,$error);
         }else{
-            mostrar_datos($idTrata,$error);
+            mostrar_datos($idTrata,$error, $aux);
         }
         
     }
